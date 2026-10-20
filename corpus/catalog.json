@@ -1,0 +1,406 @@
+{
+  "description": "Knowledge-base catalog for the MerchantBridge contact-center knowledge base (CMS metadata export): parsers read content from the files; every governance field (type, audience, status, publication and effective dates, supersession, topics) comes from here.",
+  "snapshot_date": "2026-10-19",
+  "authority": {
+    "policy": 3,
+    "fee_schedule": 3,
+    "rate_sheet": 3,
+    "notice": 3,
+    "internal_procedure": 3,
+    "glossary": 2,
+    "help_article": 2,
+    "faq": 1
+  },
+  "documents": [
+    {
+      "doc_id": "products-overview",
+      "path": "policies/products-overview.md",
+      "title": "MerchantBridge Products and Services",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Product",
+      "topics": [
+        "products",
+        "fdic",
+        "contact"
+      ]
+    },
+    {
+      "doc_id": "business-checking-plans",
+      "path": "policies/business-checking-plans.md",
+      "title": "Business Checking Plans",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Deposit Products",
+      "topics": [
+        "plans",
+        "interest"
+      ]
+    },
+    {
+      "doc_id": "business-savings",
+      "path": "policies/business-savings.md",
+      "title": "Bridge Reserve Savings Account Terms",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Deposit Products",
+      "topics": [
+        "savings",
+        "interest"
+      ]
+    },
+    {
+      "doc_id": "payouts-and-settlement",
+      "path": "policies/payouts-and-settlement.md",
+      "title": "Payouts and Settlement Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Merchant Operations",
+      "topics": [
+        "payouts"
+      ]
+    },
+    {
+      "doc_id": "chargebacks-and-disputes",
+      "path": "policies/chargebacks-and-disputes.md",
+      "title": "Chargebacks and Disputes Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Merchant Risk",
+      "topics": [
+        "chargebacks"
+      ]
+    },
+    {
+      "doc_id": "wire-transfers",
+      "path": "policies/wire-transfers.md",
+      "title": "Wire Transfer Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-03-01",
+      "owner": "Payments Operations",
+      "topics": [
+        "wires"
+      ]
+    },
+    {
+      "doc_id": "ach-payments",
+      "path": "policies/ach-payments.md",
+      "title": "ACH Payments Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Payments Operations",
+      "topics": [
+        "ach"
+      ]
+    },
+    {
+      "doc_id": "card-security-and-fraud",
+      "path": "policies/card-security-and-fraud.md",
+      "title": "Debit Card Security and Fraud Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-01-15",
+      "owner": "Fraud Prevention",
+      "topics": [
+        "cards",
+        "fraud"
+      ]
+    },
+    {
+      "doc_id": "funds-availability",
+      "path": "policies/funds-availability.md",
+      "title": "Funds Availability Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2025-07-01",
+      "owner": "Deposit Operations",
+      "topics": [
+        "deposits",
+        "mobile-deposit"
+      ]
+    },
+    {
+      "doc_id": "account-opening-kyc",
+      "path": "policies/account-opening-kyc.md",
+      "title": "Account Opening and Identity Verification Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-02-01",
+      "owner": "Compliance",
+      "topics": [
+        "onboarding"
+      ]
+    },
+    {
+      "doc_id": "account-closure",
+      "path": "policies/account-closure.md",
+      "title": "Account Closure and Dormant Accounts Policy",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Deposit Operations",
+      "topics": [
+        "closure",
+        "terminals"
+      ]
+    },
+    {
+      "doc_id": "pci-compliance",
+      "path": "policies/pci-compliance.md",
+      "title": "PCI Compliance Program",
+      "doc_type": "policy",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Merchant Risk",
+      "topics": [
+        "pci"
+      ]
+    },
+    {
+      "doc_id": "caller-verification-sop",
+      "path": "internal/caller-verification-sop.md",
+      "title": "Caller Identity Verification Procedure",
+      "doc_type": "internal_procedure",
+      "audience": "internal",
+      "status": "published",
+      "effective_from": "2026-02-01",
+      "owner": "Contact Center Operations",
+      "topics": [
+        "verification"
+      ]
+    },
+    {
+      "doc_id": "agent-handling-guidelines",
+      "path": "internal/agent-handling-guidelines.md",
+      "title": "Agent Handling Guidelines: Fee Credits, Holds and Escalations",
+      "doc_type": "internal_procedure",
+      "audience": "internal",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Contact Center Operations",
+      "topics": [
+        "fee-credits",
+        "holds",
+        "escalation"
+      ]
+    },
+    {
+      "doc_id": "contact-center-glossary",
+      "path": "internal/contact-center-glossary.md",
+      "title": "Contact Center Glossary",
+      "doc_type": "glossary",
+      "audience": "internal",
+      "status": "published",
+      "effective_from": "2026-02-01",
+      "owner": "Contact Center Operations",
+      "topics": [
+        "glossary"
+      ]
+    },
+    {
+      "doc_id": "notice-2027-fee-changes",
+      "path": "notices/2027-fee-changes.md",
+      "title": "Notice of Fee Changes Effective January 1, 2027",
+      "doc_type": "notice",
+      "audience": "customer",
+      "status": "published",
+      "published": "2026-10-01",
+      "effective_from": "2027-01-01",
+      "owner": "Pricing",
+      "topics": [
+        "fees"
+      ]
+    },
+    {
+      "doc_id": "draft-2027-pricing-proposal",
+      "path": "drafts/2027-pricing-proposal.md",
+      "title": "2027 Pricing Proposal (Draft)",
+      "doc_type": "policy",
+      "audience": "internal",
+      "status": "draft",
+      "effective_from": null,
+      "owner": "Pricing",
+      "topics": [
+        "fees"
+      ]
+    },
+    {
+      "doc_id": "help-getting-paid",
+      "path": "help/getting-paid.html",
+      "title": "Getting Paid: Payout Timing and Instant Payouts",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-05",
+      "owner": "Help Center",
+      "topics": [
+        "payouts"
+      ]
+    },
+    {
+      "doc_id": "help-lost-or-stolen-card",
+      "path": "help/lost-or-stolen-card.html",
+      "title": "Lost, Stolen, or Compromised Debit Card",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-02-10",
+      "owner": "Help Center",
+      "topics": [
+        "cards",
+        "fraud"
+      ]
+    },
+    {
+      "doc_id": "help-mobile-deposit",
+      "path": "help/mobile-deposit.html",
+      "title": "Depositing Checks with Mobile Deposit",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2025-08-01",
+      "owner": "Help Center",
+      "topics": [
+        "mobile-deposit"
+      ]
+    },
+    {
+      "doc_id": "help-terminals",
+      "path": "help/bridgeterminal-hardware.html",
+      "title": "BridgeTerminal Hardware: Buying, Renting, and Returns",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Help Center",
+      "topics": [
+        "terminals"
+      ]
+    },
+    {
+      "doc_id": "help-refunds",
+      "path": "help/refunds.html",
+      "title": "Issuing Refunds to Customers",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-04-20",
+      "owner": "Help Center",
+      "topics": [
+        "refunds"
+      ]
+    },
+    {
+      "doc_id": "help-online-banking-security",
+      "path": "help/online-banking-security.html",
+      "title": "Online Banking Sign-in and Security",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-03-12",
+      "owner": "Help Center",
+      "topics": [
+        "security"
+      ]
+    },
+    {
+      "doc_id": "help-tax-forms",
+      "path": "help/tax-forms.html",
+      "title": "Tax Forms: 1099-K and 1099-INT",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-01-08",
+      "owner": "Help Center",
+      "topics": [
+        "tax"
+      ]
+    },
+    {
+      "doc_id": "help-business-debit-card",
+      "path": "help/business-debit-card.html",
+      "title": "Using Your Bridge Business Debit Mastercard",
+      "doc_type": "help_article",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "owner": "Help Center",
+      "topics": [
+        "cards"
+      ]
+    },
+    {
+      "doc_id": "faq-wire-transfers",
+      "path": "help/wire-transfers-faq.html",
+      "title": "Wire Transfers FAQ",
+      "doc_type": "faq",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2025-02-10",
+      "owner": "Help Center",
+      "topics": [
+        "wires"
+      ]
+    },
+    {
+      "doc_id": "fee-schedule-2026-07",
+      "path": "fees/fee-and-rate-schedule-2026-07.csv",
+      "title": "Business Fee & Rate Schedule (effective July 1, 2026)",
+      "doc_type": "fee_schedule",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-07-01",
+      "supersedes": "fee-schedule-2025-01",
+      "owner": "Pricing",
+      "topics": [
+        "fees"
+      ]
+    },
+    {
+      "doc_id": "fee-schedule-2025-01",
+      "path": "fees/fee-and-rate-schedule-2025-01.csv",
+      "title": "Business Fee & Rate Schedule (effective January 1, 2025)",
+      "doc_type": "fee_schedule",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2025-01-01",
+      "owner": "Pricing",
+      "topics": [
+        "fees"
+      ]
+    },
+    {
+      "doc_id": "savings-rates-2026-10",
+      "path": "fees/savings-rates-2026-10.csv",
+      "title": "Bridge Reserve Savings Rate Sheet (effective October 1, 2026)",
+      "doc_type": "rate_sheet",
+      "audience": "customer",
+      "status": "published",
+      "effective_from": "2026-10-01",
+      "owner": "Treasury",
+      "topics": [
+        "savings",
+        "interest"
+      ]
+    }
+  ]
+}

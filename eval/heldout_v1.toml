@@ -1,0 +1,333 @@
+# MBFS held-out set, H01-H12. Same schema as dev.toml.
+#
+# Built in isolation, before the system had ever been run on these queries: one agent wrote the questions
+# scenario-first from the brief's requirements (customer and agent voice, a typo, multi-part, ambiguous,
+# out-of-scope and account-specific asks); a second agent labeled them blind against a plain-text dump of
+# the indexed corpus, with no access to the code or to any system output. Labels are as returned; the
+# labeler's own doubts are in eval/heldout_notes.md. results.json records this file's SHA-256 ("frozen").
+
+[[query]]
+id = "H01"
+query = "I did $2,214 in sales yesterday but my payout was only $1,912, where did the rest go?"
+tags = ["payouts", "deductions", "account-specific", "reasoning", "customer-phrasing"]
+acceptable = ["partial", "answer"]
+notes = "The exact split of the $302 needs the merchant's own payout and transaction detail (verify the caller first), but the KB explains what reduces a payout: per-transaction processing fees, refunds, chargebacks (disputed amount plus the $25.00 fee), a rolling reserve of up to 10% of daily card volume (holds/reserves go to Risk Operations without speculating) or backup withholding after a TIN-mismatch notice. A strong answer also notes that sales after the 8:00 PM ET batch close roll into the next batch and that plan timing (2 business days on Essentials, next business day on Plus/Premier) means the payout may not be yesterday's batch, without asserting which cause applies."
+[[query.facts]]
+id = "processing_fees"
+match = "text:processing fee"
+support = [
+  { doc = "help-tax-forms", quote = "Your 1099-K shows the gross amount of your card payments for the year, before refunds, chargebacks, and processing fees are subtracted, so it may not match the payouts deposited to your account." },
+  { doc = "fee-schedule-2026-07", row = "MER-01" },
+  { doc = "fee-schedule-2026-07", row = "MER-02" },
+]
+[[query.facts]]
+id = "refunds_deducted"
+match = "text:refund"
+support = [
+  { doc = "payouts-and-settlement", quote = "Refunds you issue are deducted from your next payout." },
+  { doc = "help-getting-paid", quote = "Refunds you issue are deducted from your next payout or your checking balance." },
+  { doc = "help-refunds", quote = "Refunds are deducted from your next payout. If your next payout isn't enough to cover a refund, the remaining amount is deducted from your MerchantBridge business checking balance." },
+  { doc = "help-refunds", quote = "Refunds are deducted from your next payout first." },
+  { doc = "help-tax-forms", quote = "Your 1099-K shows the gross amount of your card payments for the year, before refunds, chargebacks, and processing fees are subtracted, so it may not match the payouts deposited to your account." },
+]
+[[query.facts]]
+id = "chargebacks_deducted"
+match = "text:chargeback"
+support = [
+  { doc = "payouts-and-settlement", quote = "When MBFS receives a chargeback, the disputed amount plus the chargeback fee is also deducted from your next payout." },
+  { doc = "chargebacks-and-disputes", quote = "Debit the disputed amount plus the chargeback fee from your next payout." },
+  { doc = "help-getting-paid", quote = "When we receive a chargeback, we debit the disputed amount plus the chargeback fee from your next payout, or from your checking account if your payouts aren't enough to cover it." },
+  { doc = "help-tax-forms", quote = "Your 1099-K shows the gross amount of your card payments for the year, before refunds, chargebacks, and processing fees are subtracted, so it may not match the payouts deposited to your account." },
+]
+[[query.forbidden]]
+match = "money:15"
+why = "Stale chargeback fee from the superseded January 2025 schedule (MER-05 was $15.00); the current fee is $25.00."
+
+[[query]]
+id = "H02"
+query = "out-of-network ATM fee on Essentials?"
+tags = ["fees", "debit-card", "atm", "plan-specific", "stale-value-trap", "terse-shorthand"]
+acceptable = ["answer"]
+notes = "Bridge Essentials charges $2.50 per out-of-network ATM withdrawal (NON-NETWORK ATM FEE), plus any surcharge the ATM operator charges; Allpoint network ATMs are in-network and surcharge-free. The rebate of up to 4 out-of-network ATM fees per statement cycle is Premier-only and must not be attributed to Essentials."
+[[query.facts]]
+id = "atm_fee"
+match = "money:2.50"
+support = [
+  { doc = "fee-schedule-2026-07", row = "CRD-02", column = "Bridge Essentials" },
+  { doc = "help-business-debit-card", quote = "Withdrawals at ATMs outside the Allpoint network have a $2.50 out-of-network ATM fee, plus any surcharge the ATM operator charges." },
+  { doc = "help-business-debit-card", quote = "Out-of-network ATM fee (per withdrawal); Bridge Essentials: $2.50" },
+]
+[[query.forbidden]]
+match = "money:2"
+why = "Stale out-of-network ATM fee from the superseded January 2025 schedule (CRD-02 was $2.00)."
+
+[[query]]
+id = "H03"
+query = "I got a text saying it's from MerchantBridge asking for the verification code you just sent me, is that legit?"
+tags = ["security", "phishing", "one-time-passcode", "account-takeover", "customer-phrasing"]
+acceptable = ["answer"]
+notes = "Not legitimate: MerchantBridge never calls, texts or emails to ask for a one-time passcode, so the code must not be shared; an unrequested code means someone may be trying to sign in, so the customer should change the password, report the text to phishing@merchantbridge.example and call the 24/7 Card Fraud line (1-800-555-0199) or Business Support (1-800-555-0142). If the code was already shared, the password should be reset right away, and the agent must not ask the caller to read the code out."
+[[query.facts]]
+id = "never_asks"
+match = "text:never"
+support = [
+  { doc = "help-online-banking-security", quote = "MerchantBridge will never call, text, or email you to ask for your one-time passcode, password, PIN, or full card number." },
+  { doc = "products-overview", quote = "MerchantBridge will never call, text or email you to ask for your PIN, full card number, password or one-time passcode." },
+  { doc = "card-security-and-fraud", quote = "Scammers sometimes pretend to be MerchantBridge, but we will never ask for your PIN, full card number, password, or one-time passcode, whether by phone, text, or email." },
+  { doc = "help-lost-or-stolen-card", quote = "We will never ask for your PIN, full card number, or one-time passcode." },
+  { doc = "help-business-debit-card", quote = "MerchantBridge will never call, text, or email you to ask for your PIN, full card number, password, or one-time passcode." },
+  { doc = "caller-verification-sop", quote = "Customers are told that MBFS will never ask for these." },
+]
+[[query.facts]]
+id = "change_password"
+match = "re:(?i)(chang(e|ing)|reset(ting)?|updat(e|ing))\\s+(your\\s+|the\\s+|their\\s+|her\\s+|his\\s+|account\\s+)?password|password\\s+(reset|change)|new\\s+password"
+support = [
+  { doc = "help-online-banking-security", quote = "If you get a verification code you didn't request, don't share it with anyone, and change your password. Someone may be trying to sign in as you." },
+  { doc = "help-online-banking-security", quote = "If you entered your password or a passcode on a suspicious site, reset your password right away and call Business Support." },
+]
+[[query.facts]]
+id = "report_phishing"
+match = "text:phishing@merchantbridge.example"
+support = [
+  { doc = "help-online-banking-security", quote = "Report phishing emails and texts to phishing@merchantbridge.example, then delete them." },
+  { doc = "products-overview", quote = "Phishing: report phishing to phishing@merchantbridge.example." },
+  { doc = "card-security-and-fraud", quote = "Forward suspicious emails to phishing@merchantbridge.example." },
+  { doc = "help-lost-or-stolen-card", quote = "You can forward suspicious emails to phishing@merchantbridge.example." },
+]
+
+[[query]]
+id = "H04"
+query = "cust wants to send her terminal back, how does that work?"
+tags = ["terminals", "returns", "rented-vs-purchased", "ambiguity", "agent-shorthand"]
+acceptable = ["answer", "clarify", "partial"]
+notes = "Only rented terminals are returned: within 30 days of cancelling the rental or closing the account, using the prepaid return label (pack it, attach the label, drop it with the carrier, keep the tracking number), otherwise a non-return fee of $199.00 (Mini) or $599.00 (Pro) applies; a purchased terminal is hers to keep. Asking whether it is rented or purchased (or defective: rented units are replaced free, purchased units have a 1-year warranty) is fine; the KB does not say how to cancel a rental or whether a purchased terminal can be refunded, so those points should be escalated (Merchant Operations owns terminals), not promised."
+[[query.facts]]
+id = "return_window"
+match = "days:30"
+support = [
+  { doc = "help-terminals", quote = "If you cancel a terminal rental or close your MerchantBridge account, return each rented terminal within 30 days of the cancellation or account closure, using the prepaid return label we provide." },
+  { doc = "help-terminals", quote = "Non-return fee: If a rented terminal is not returned within 30 days of cancellation or account closure, a non-return fee is charged for each terminal: $199.00 for a BridgeTerminal Mini or $599.00 for a BridgeTerminal Pro." },
+  { doc = "account-closure", quote = "Return within 30 days of closure using the prepaid return label, or a $199.00 non-return fee applies" },
+  { doc = "account-closure", quote = "Return within 30 days of closure using the prepaid return label, or a $599.00 non-return fee applies" },
+  { doc = "account-closure", quote = "The same 30-day window applies if you cancel a terminal rental but keep your account open." },
+  { doc = "fee-schedule-2026-07", row = "HW-05" },
+  { doc = "fee-schedule-2026-07", row = "HW-06" },
+]
+[[query.facts]]
+id = "prepaid_label"
+match = "text:prepaid"
+support = [
+  { doc = "help-terminals", quote = "If you cancel a terminal rental or close your MerchantBridge account, return each rented terminal within 30 days of the cancellation or account closure, using the prepaid return label we provide." },
+  { doc = "help-terminals", quote = "Attach the prepaid return label and drop the package off with the carrier shown on the label." },
+  { doc = "account-closure", quote = "Return within 30 days of closure using the prepaid return label, or a $199.00 non-return fee applies" },
+  { doc = "account-closure", quote = "Return within 30 days of closure using the prepaid return label, or a $599.00 non-return fee applies" },
+]
+[[query.facts]]
+id = "purchased_kept"
+match = "re:(?i)\\b(bought|purchased?)\\b"
+support = [
+  { doc = "help-terminals", quote = "Only rented terminals need to be returned. A terminal you bought is yours to keep, even if you close your account." },
+  { doc = "account-closure", quote = "If you bought it: No return needed" },
+  { doc = "account-closure", quote = "Note: Purchased terminals are yours to keep, but they cannot accept card payments through MerchantBridge after your account is closed." },
+]
+
+[[query]]
+id = "H05"
+query = "Do I need to sign the back of the check if I'm depositing it in the app?"
+tags = ["mobile-deposit", "endorsement", "policy-vs-help-conflict", "customer-phrasing"]
+acceptable = ["answer"]
+notes = "Yes: before photographing the check, endorse the back with the signature and the words \"For mobile deposit only at MerchantBridge\"; a check without this endorsement may be rejected. If the answer mentions keeping the paper check, the Funds Availability Policy's 14 days (then destroy it) wins over the help article's 30 days."
+[[query.facts]]
+id = "signature"
+match = "re:(?i)\\byes\\b|signature|sign\\s+(your\\s+name|the\\s+back|it)"
+support = [
+  { doc = "funds-availability", quote = "Before you photograph the check, endorse the back with:" },
+  { doc = "funds-availability", quote = "Your signature." },
+  { doc = "help-mobile-deposit", quote = "On the back, sign your name and write \"For mobile deposit only at MerchantBridge\"." },
+]
+[[query.facts]]
+id = "endorsement_words"
+match = "text:For mobile deposit only at MerchantBridge"
+support = [
+  { doc = "funds-availability", quote = "The words \"For mobile deposit only at MerchantBridge\"." },
+  { doc = "help-mobile-deposit", quote = "On the back, sign your name and write \"For mobile deposit only at MerchantBridge\"." },
+  { doc = "help-mobile-deposit", quote = "The endorsement is missing or doesn't include \"For mobile deposit only at MerchantBridge\"." },
+]
+[[query.forbidden]]
+match = "days:30"
+why = "The help article's 30-day check-retention period conflicts with the more authoritative Funds Availability Policy, which says to keep the check 14 days and then destroy it."
+
+[[query]]
+id = "H06"
+query = "chargeback response deadline? merchant just got the notice"
+tags = ["chargebacks", "deadlines", "calendar-days", "agent-shorthand", "stale-value-trap"]
+acceptable = ["answer"]
+notes = "The merchant must accept or respond with evidence in the Merchant Portal's Disputes tab within 10 calendar days of the notification date, weekends and holidays included; otherwise the chargeback is automatically accepted and the disputed funds are not returned. A good answer may add the 7-calendar-day retrieval-request deadline, that the $25.00 chargeback fee is non-refundable even if the merchant wins, and that the merchant should not also refund a sale that has already been charged back."
+[[query.facts]]
+id = "ten_days"
+match = "days:10"
+support = [
+  { doc = "chargebacks-and-disputes", quote = "Accept or respond within 10 calendar days of notification" },
+  { doc = "chargebacks-and-disputes", quote = "The 10 calendar days are counted from the notification date, including weekends and holidays." },
+]
+[[query.facts]]
+id = "calendar_days"
+match = "re:(?i)calendar|including\\s+weekends|weekends\\s+and\\s+holidays"
+support = [
+  { doc = "chargebacks-and-disputes", quote = "Accept or respond within 10 calendar days of notification" },
+  { doc = "chargebacks-and-disputes", quote = "The 10 calendar days are counted from the notification date, including weekends and holidays." },
+]
+[[query.facts]]
+id = "auto_accepted"
+match = "re:(?i)automatically\\s+accept|accepted\\s+automatically|auto-?accept|deemed\\s+accepted|by\\s+default"
+support = [
+  { doc = "chargebacks-and-disputes", quote = "If you don't accept or respond by the deadline, the chargeback is automatically accepted and the disputed funds are not returned." },
+]
+[[query.forbidden]]
+match = "text:10 business days"
+why = "The chargeback window is 10 calendar days including weekends and holidays; 10 business days is the debit-card provisional-credit timing."
+[[query.forbidden]]
+match = "money:15"
+why = "Stale chargeback fee from the superseded January 2025 schedule (MER-05 was $15.00); the current fee is $25.00."
+
+[[query]]
+id = "H07"
+query = "Am I supposed to charge sales tax when I ship online orders to other states?"
+tags = ["out-of-scope", "tax", "no-advice", "refuse"]
+acceptable = ["refuse"]
+notes = "The KB does not cover sales-tax obligations, so the assistant should not say whether sales tax applies; it should state that MBFS cannot provide tax advice and that the customer should consult a qualified tax professional. It must not give state sales-tax or nexus guidance from outside the KB."
+[[query.facts]]
+id = "no_tax_advice"
+match = "re:(?i)tax\\s+(advice|professional|advisor)"
+support = [
+  { doc = "help-tax-forms", quote = "MBFS cannot provide tax advice. Please consult a qualified tax professional." },
+  { doc = "business-savings", quote = "MBFS cannot provide tax advice. Please consult a qualified tax professional." },
+]
+
+[[query]]
+id = "H08"
+query = "reserve savigns monthly withdrawal limit?"
+tags = ["savings", "withdrawals", "fees", "typo", "terse-shorthand"]
+acceptable = ["answer"]
+notes = "Bridge Reserve Savings allows 6 withdrawals per statement cycle at no charge, and each further withdrawal in the same cycle is charged $10.00 (EXCESS WITHDRAWAL FEE) on every plan, so extra withdrawals cost a fee rather than being blocked. It should not be confused with the payout rolling reserve or the debit card's $1,000 daily ATM limit."
+[[query.facts]]
+id = "six_free"
+match = "re:(?i)\\b(6|six)\\b"
+support = [
+  { doc = "business-savings", quote = "You can make 6 withdrawals from Bridge Reserve Savings per statement cycle at no charge." },
+  { doc = "fee-schedule-2026-07", row = "SAV-02" },
+]
+[[query.facts]]
+id = "excess_fee"
+match = "money:10"
+support = [
+  { doc = "business-savings", quote = "Each withdrawal beyond 6 in the same statement cycle is charged $10.00 (EXCESS WITHDRAWAL FEE on your statement)." },
+  { doc = "fee-schedule-2026-07", row = "SAV-02" },
+]
+
+[[query]]
+id = "H09"
+query = "How much do you guys charge to send money to my supplier?"
+tags = ["fees", "ach", "wires", "ambiguity", "plan-unspecified", "outdated-faq-trap", "stale-value-trap"]
+acceptable = ["answer", "clarify"]
+notes = "The cost depends on method and plan, so the assistant should either ask (ACH or wire, domestic or international, which plan) or list the current options: standard ACH $0.25 per payment on Essentials (Plus: first 100 per cycle included, then $0.15; Premier included), same-day ACH $5.00 per batch ($2.00 on Premier), outgoing domestic wire $30/$25/included, outgoing international wire $50/$45/$25 plus possible intermediary-bank deductions. Essentials' international wire is $50, not the outdated FAQ's $45, and the FAQ's 3:00/1:00 PM cut-offs are superseded by 4:00/2:00 PM ET."
+[[query.facts]]
+id = "standard_ach_essentials"
+match = "money:0.25"
+support = [
+  { doc = "fee-schedule-2026-07", row = "ACH-01", column = "Bridge Essentials" },
+]
+[[query.facts]]
+id = "domestic_wire_essentials"
+match = "money:30"
+support = [
+  { doc = "fee-schedule-2026-07", row = "WIR-01", column = "Bridge Essentials" },
+]
+[[query.facts]]
+id = "intl_wire_essentials"
+match = "money:50"
+support = [
+  { doc = "fee-schedule-2026-07", row = "WIR-03", column = "Bridge Essentials" },
+]
+[[query.forbidden]]
+match = "money:40"
+why = "Stale Bridge Plus outgoing international wire fee from the possibly outdated Wire Transfers FAQ and the superseded 2025 schedule; current WIR-03 for Plus is $45.00."
+[[query.forbidden]]
+match = "time:3pm"
+why = "Outdated FAQ domestic wire cut-off; the Wire Transfer Policy cut-off is 4:00 PM ET."
+[[query.forbidden]]
+match = "time:1pm"
+why = "Outdated FAQ international wire cut-off; the Wire Transfer Policy cut-off is 2:00 PM ET."
+
+[[query]]
+id = "H10"
+query = "why was this cust's application declined?"
+tags = ["onboarding", "kyc", "account-specific", "escalation", "agent-shorthand"]
+acceptable = ["refuse", "partial"]
+notes = "The decline reason for a specific application is account data that is not in the KB, so the assistant must not guess; it should route the agent to the Onboarding team, which handles application status. It may add general context (prohibited types such as cannabis, crypto exchanges/ATMs, money services businesses, online gambling and adult entertainment; US registration and a US physical address, no P.O. boxes; restricted types needing enhanced review) without presenting any of it as this customer's reason or promising approval."
+[[query.facts]]
+id = "route_onboarding"
+match = "text:Onboarding"
+support = [
+  { doc = "account-opening-kyc", quote = "Our Onboarding team handles questions about an application in progress." },
+  { doc = "agent-handling-guidelines", quote = "Team: Onboarding; Escalate for: Restricted business types and application status" },
+  { doc = "account-opening-kyc", quote = "MerchantBridge support agents must not promise approval for a restricted business type and must route the applicant to the Onboarding team, which carries out the enhanced review and makes the decision." },
+  { doc = "agent-handling-guidelines", quote = "They may be approved only after enhanced due diligence, so route the applicant to Onboarding." },
+]
+
+[[query]]
+id = "H11"
+query = "How do I add my business partner to the account, and can she get her own debit card?"
+tags = ["users", "permissions", "employee-cards", "multi-part", "in-app-approval", "customer-phrasing"]
+acceptable = ["answer", "partial"]
+notes = "An owner or admin adds her as a user in Settings (she sets up her own password and two-step verification); user changes must be approved in the MBFS app by an owner or admin, so an agent cannot add her over the phone. She can get her own Bridge Business Debit Mastercard as one of up to 10 employee cards with spend controls (Cards > Employee cards); if she is a co-owner the business should also update its ownership information, and the KB does not describe role assignment or a separate owner card."
+[[query.facts]]
+id = "add_in_settings"
+match = "text:Settings"
+support = [
+  { doc = "help-online-banking-security", quote = "An owner or admin can add users in Settings, and each new user sets up their own password and two-step verification." },
+]
+[[query.facts]]
+id = "owner_or_admin"
+match = "re:(?i)owners?\\s*(or|and|/)\\s*(an\\s+)?admins?"
+support = [
+  { doc = "help-online-banking-security", quote = "An owner or admin can add users in Settings, and each new user sets up their own password and two-step verification." },
+  { doc = "help-online-banking-security", quote = "For your protection, changes to users, your payout bank account, or your contact email or phone number must be approved in the MerchantBridge app by an owner or admin." },
+  { doc = "caller-verification-sop", quote = "An owner or admin can add them as a user in the app; after that, verify them like any other user." },
+  { doc = "caller-verification-sop", quote = "Role: Owner or admin; What you can discuss or do for them: Full access to the account, including adding users and changing the payout destination" },
+  { doc = "caller-verification-sop", quote = "These changes always require approval in the app by an owner or admin, even when the caller is verified:" },
+]
+[[query.facts]]
+id = "employee_card"
+match = "text:employee card"
+support = [
+  { doc = "help-business-debit-card", quote = "Owners and admins can order up to 10 employee cards with spend controls." },
+  { doc = "help-business-debit-card", quote = "To order an employee card or change its spend controls, go to Cards > Employee cards in the MerchantBridge app." },
+  { doc = "products-overview", quote = "Use it for purchases and ATM withdrawals, and add up to 10 employee cards with spend controls." },
+]
+
+[[query]]
+id = "H12"
+query = "PCI SAQ still required if merchant only uses the Mini?"
+tags = ["pci", "saq", "p2pe", "terminals", "agent-shorthand", "stale-value-trap"]
+acceptable = ["answer", "partial"]
+notes = "Yes: every merchant must complete the annual SAQ in BridgeSecure whatever its setup; accepting cards only through MerchantBridge P2PE terminals may qualify it for the shorter SAQ P2PE (not if it also takes online or invoice payments), and since the KB never states the Mini's P2PE status, that point must be hedged. Not completing the SAQ within 60 days of its due date triggers the $19.95/month non-validation fee on every plan."
+[[query.facts]]
+id = "still_required"
+match = "re:(?i)\\b(yes|required|must)\\b"
+support = [
+  { doc = "pci-compliance", quote = "All MerchantBridge merchants must:" },
+  { doc = "pci-compliance", quote = "Complete the annual PCI Self-Assessment Questionnaire (SAQ) in BridgeSecure by its due date." },
+  { doc = "pci-compliance", quote = "As a MerchantBridge merchant, you are responsible for meeting PCI DSS and for confirming your compliance each year in BridgeSecure, our PCI compliance portal." },
+  { doc = "pci-compliance", quote = "The SAQ is due again every year, so plan to complete it annually." },
+  { doc = "products-overview", quote = "complete your annual PCI Self-Assessment Questionnaire in BridgeSecure." },
+]
+[[query.facts]]
+id = "saq_p2pe"
+match = "re:(?i)P2PE|point-to-point"
+support = [
+  { doc = "pci-compliance", quote = "If you accept cards only through MerchantBridge terminals that use point-to-point encryption, you may qualify for SAQ P2PE, a shorter questionnaire." },
+]
+[[query.forbidden]]
+match = "money:14.95"
+why = "Stale PCI non-validation fee from the superseded January 2025 schedule; current MER-07 is $19.95 per month on every plan."

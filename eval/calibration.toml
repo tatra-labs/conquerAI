@@ -1,0 +1,1761 @@
+# Calibration set for the reranker-score floors. It is NOT part of the evaluation: dev and the held-out sets
+# stay test-only, and any question overlapping one of them was removed.
+#
+# Positives: realistic questions written from the corpus alone by agents that never saw the system or its eval
+# sets, in four styles (agent shorthand, the customer's words, a situation first, typos), each with a verbatim
+# quote that answers it; an independent agent kept only the questions the quote really answers. Negatives: the
+# original 28 off-topic questions, plus off-topic, not-offered and MBFS-but-not-covered questions in the same
+# styles, each checked against the corpus by a second agent.
+#
+# Why: the first floors were fitted on questions templated from the documents' own headings. Those score far
+# higher than real questions, so held-out v1 refused questions whose right passage was ranked first.
+# The floor per unit type minimises 10 x off-topic answered + 1 x on-topic refused, over the questions that reach
+# the floor rule (evaluation.calibrate).
+
+[[positive]]
+query = "premier monthly fee if cust doesnt keep the 50k"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: Monthly maintenance fee; Statement descriptor: MONTHLY SERVICE FEE; Bridge Essentials: $12.00 [1]; Bridge Plus: $25.00 [1]; Bridge Premier: $45.00 [1]"
+
+[[positive]]
+query = "plus customer had around 340 transactions go through checking this cycle, what do they pay on the ones over the limit"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Plus: $0.40; Bridge Premier: Included; Unit: per item; Notes: Allowance per statement cycle: 150 (Essentials), 300 (Plus), unlimited (Premier)"
+
+[[positive]]
+query = "do u guys charge to mail me my statements? i never look at them online"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Paper statements; Statement descriptor: PAPER STMT FEE; Bridge Essentials: $3.00; Bridge Plus: $3.00; Bridge Premier: Free; Unit: per month"
+
+[[positive]]
+query = "customer was short on funds thursday and 4 of their checks got returned the same day, how much will they get hit in NSF fees"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Plus: $30.00 [2]; Bridge Premier: $30.00 [2]; Unit: per item; Footnote [2]: A maximum of 3 returned item (NSF) fees will be charged per business day."
+
+[[positive]]
+query = "cust wants to stop pmt on a check, how much on essentials"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: Stop payment (check or ACH debit); Statement descriptor: STOP PAYMENT FEE; Bridge Essentials: $30.00"
+
+[[positive]]
+query = "a check my client gave me bounced after i deposited it... are you charging ME for that??"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Deposited item returned; Statement descriptor: DEPOSITED ITEM RETURN FEE; Bridge Essentials: $12.00; Bridge Plus: $12.00; Bridge Premier: $12.00"
+
+[[positive]]
+query = "is there a fee for closing an acount we just opend last month"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Essentials: $50.00; Bridge Plus: $50.00; Bridge Premier: $50.00; Unit: per account; Notes: Applies if the account is closed within 90 days of opening"
+
+[[positive]]
+query = "is there a charge if an account just sits there unused for more then a year"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Plus: $5.00; Bridge Premier: $5.00; Unit: per month; Notes: After 12 consecutive months with no customer-initiated activity"
+
+[[positive]]
+query = "how much does it cost to order more checks? almost out"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Check orders; Statement descriptor: CHECK ORDER; Bridge Essentials: Varies by check style; priced by our check vendor"
+
+[[positive]]
+query = "plus acct - fee to send a domestic wire?"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: Domestic wire – outgoing; Statement descriptor: DOM WIRE OUT FEE; Bridge Essentials: $30.00; Bridge Plus: $25.00; Bridge Premier: Included"
+
+[[positive]]
+query = "my customer is wiring me a payment from their bank in ohio, do i have to pay anything to receive it"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Domestic wire – incoming; Statement descriptor: DOM WIRE IN FEE; Bridge Essentials: $15.00; Bridge Plus: $10.00; Bridge Premier: Included"
+
+[[positive]]
+query = "essentials customer needs to wire $8,000 to a supplier in Germany this week, what's our fee to send it"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Service: International wire – outgoing; Statement descriptor: INTL WIRE OUT FEE; Bridge Essentials: $50.00; Bridge Plus: $45.00; Bridge Premier: $25.00"
+
+[[positive]]
+query = "do we charge for incomming wires from overseas on the plus plan"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Service: International wire – incoming; Statement descriptor: INTL WIRE IN FEE; Bridge Essentials: $16.00; Bridge Plus: $16.00; Bridge Premier: Included"
+
+[[positive]]
+query = "cust wants a wire pulled back, fee? charged even if the $$ never comes back?"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Plus: $35.00; Bridge Premier: $35.00; Unit: per request; Notes: Charged whether or not the recall is successful"
+
+[[positive]]
+query = "Plus customer pays about 140 vendors by regular ACH every month and wants to know if they get charged per payment"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Service: Standard ACH origination; Statement descriptor: ACH ORIGINATION FEE; Bridge Essentials: $0.25; Bridge Plus: Included (first 100 per cycle), then $0.15"
+
+[[positive]]
+query = "same day ach fee premier, per pmt or per batch"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: Same-day ACH; Statement descriptor: SAME DAY ACH FEE; Bridge Essentials: $5.00; Bridge Plus: $5.00; Bridge Premier: $2.00; Unit: per batch"
+
+[[positive]]
+query = "what do we charge when an ach payment the merchant sent gets retuned"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Service: ACH return; Statement descriptor: ACH RETURN FEE; Bridge Essentials: $5.00; Bridge Plus: $5.00; Bridge Premier: $5.00"
+
+[[positive]]
+query = "heading to mexico for a trade show, will i get charged extra for using my debit card down there?"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Foreign transaction fee; Statement descriptor: FOREIGN TXN FEE; Bridge Essentials: 1% of transaction; Bridge Plus: 1% of transaction; Bridge Premier: None"
+
+[[positive]]
+query = "Premier client hits ATMs outside the network about 6 times a month on the road, do they get any of those ATM fees back"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Footnote [5]: Premier: up to 4 out-of-network ATM fees are rebated per statement cycle."
+
+[[positive]]
+query = "Essentials customer's debit card was stolen and they fly out Thursday, they want the new card rushed, what does that cost"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Service: Expedited card replacement (2 business days); Statement descriptor: EXPEDITED CARD FEE; Bridge Essentials: $25.00; Bridge Plus: $25.00; Bridge Premier: Free"
+
+[[positive]]
+query = "in person processing rate on ess? tap/chip"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: Card-present transaction (tap, dip, swipe); Statement descriptor: PROCESSING FEES; Bridge Essentials: 2.60% + $0.10; Bridge Plus: 2.60% + $0.10; Bridge Premier: 2.50% + $0.10"
+
+[[positive]]
+query = "whats your cut when someone pays my invoice online with a card"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Service: Card-not-present transaction (online, invoice, keyed); Statement descriptor: PROCESSING FEES; Bridge Essentials: 2.90% + $0.30; Bridge Plus: 2.90% + $0.30; Bridge Premier: 2.75% + $0.30"
+
+[[positive]]
+query = "merchant is doing about $150k a month in card sales and asked if there's anything cheaper than the flat processing rate"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Notes: Available to merchants processing more than $100,000 per month: interchange + 0.30% + $0.08 per transaction. Contact sales."
+
+[[positive]]
+query = "how much is an instnat payout on the premier plan"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Service: Instant Payout; Statement descriptor: INSTANT PAYOUT FEE; Bridge Essentials: 1.5% of payout (min $0.50); Bridge Plus: 1.5% of payout (min $0.50); Bridge Premier: 1.0% of payout (min $0.50)"
+
+[[positive]]
+query = "CB fee amt? does merchant get it back if they win"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Premier: $25.00; Unit: per chargeback; Notes: Non-refundable regardless of the dispute outcome"
+
+[[positive]]
+query = "what's this $99 PCI charge, do i really have to pay that every year?"
+style = "customer"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Essentials: $99.00; Bridge Plus: $99.00; Bridge Premier: Included; Unit: per year; Notes: Billed on the account anniversary"
+
+[[positive]]
+query = "whats the penalty if a merchant never finishes there PCI questionaire"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Premier: $19.95; Unit: per month; Notes: Charged if the annual SAQ is not completed within 60 days of its due date"
+
+[[positive]]
+query = "price to buy the mini reader outright, no rental"
+style = "shorthand"
+doc = "fee-schedule-2026-07"
+quote = "Service: BridgeTerminal Mini – purchase; Statement descriptor: TERMINAL PURCHASE; Bridge Essentials: $199.00"
+
+[[positive]]
+query = "restaurant owner wants two Pro terminals for the holiday rush but doesn't want to buy them, what's the monthly rental on each"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Service: BridgeTerminal Pro – rental; Statement descriptor: TERMINAL RENTAL; Bridge Essentials: $39.00; Bridge Plus: $39.00; Bridge Premier: $39.00; Unit: per month"
+
+[[positive]]
+query = "is there a monthy fee on the reserve savings or is it free"
+style = "typo"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Premier: $5.00 [6]; Unit: per month; Footnote [6]: Waived with a minimum daily balance of $1,000."
+
+[[positive]]
+query = "customer already moved money out of savings 6 times this cycle and needs to pull another $2k tomorrow, will that cost anything"
+style = "narrative"
+doc = "fee-schedule-2026-07"
+quote = "Bridge Premier: $10.00; Unit: per withdrawal; Notes: Applies to each withdrawal beyond 6 per statement cycle"
+
+[[positive]]
+query = "cust moving ~25k into reserve svgs, what apy"
+style = "shorthand"
+doc = "savings-rates-2026-10"
+quote = "Tier: 2; Minimum balance: $10,000.00; Maximum balance: $49,999.99; Interest rate: 2.23%; APY: 2.25%"
+
+[[positive]]
+query = "customer just sold a building and wants to park around $400,000 in Reserve Savings, what rate would that earn right now"
+style = "narrative"
+doc = "savings-rates-2026-10"
+quote = "Tier: 4; Minimum balance: $250,000.00; Maximum balance: No maximum; Interest rate: 3.34%; APY: 3.40%"
+
+[[positive]]
+query = "if i keep like 120k in savings does all of it get the higher rate or only the part over 50k?"
+style = "customer"
+doc = "savings-rates-2026-10"
+quote = "The rate for the tier that your end-of-day balance falls into applies to your entire balance."
+
+[[positive]]
+query = "how often does the intrest compound on savings and when does it get paid out"
+style = "typo"
+doc = "savings-rates-2026-10"
+quote = "Interest is compounded daily and credited monthly."
+
+[[positive]]
+query = "is the savings rate locked in once i open the account or can you guys drop it whenever?"
+style = "customer"
+doc = "savings-rates-2026-10"
+quote = "Rates are variable and may change at any time after the account is opened."
+
+[[positive]]
+query = "ess monthly fee going up in jan? to how much"
+style = "shorthand"
+doc = "notice-2027-fee-changes"
+quote = "Bridge Essentials monthly maintenance fee: increases from $12.00 to $15.00 per month."
+
+[[positive]]
+query = "will the monthly fee still get waved next year if they keep 2500 average balance on essentials"
+style = "typo"
+doc = "notice-2027-fee-changes"
+quote = "the Bridge Essentials monthly maintenance fee is waived, both before and after January 1, 2027."
+
+[[positive]]
+query = "Plus merchant takes a $2,000 instant payout most weeks, what will each one cost them after the January change"
+style = "narrative"
+doc = "notice-2027-fee-changes"
+quote = "Instant Payout fee on Bridge Essentials and Bridge Plus: increases from 1.5% to 1.75% of each payout."
+
+[[positive]]
+query = "is the 50 cent minimum on instant payouts going up to next year"
+style = "typo"
+doc = "notice-2027-fee-changes"
+quote = "The $0.50 minimum per payout is unchanged."
+
+[[positive]]
+query = "are you raising what you charge for paper statements next year??"
+style = "customer"
+doc = "notice-2027-fee-changes"
+quote = "Paper statements on Bridge Essentials and Bridge Plus: increase from $3.00 to $4.00 per month."
+
+[[positive]]
+query = "premier cust asking if the jan fee hikes affect them"
+style = "shorthand"
+doc = "notice-2027-fee-changes"
+quote = "If your business is on Bridge Premier, none of these changes apply to your account."
+
+[[positive]]
+query = "are chargeback fees going up in january too?"
+style = "customer"
+doc = "notice-2027-fee-changes"
+quote = "The chargeback fee, which remains $25.00 per chargeback."
+
+[[positive]]
+query = "if instant payout fee goes up next year does that mean my normal card depsits come in slower"
+style = "typo"
+doc = "notice-2027-fee-changes"
+quote = "Standard payouts continue on your plan's usual schedule and are not affected by the Instant Payout change."
+
+[[positive]]
+query = "Essentials customer's statement cycle closes Nov 20, will that statement have the new $15 monthly fee or the current one"
+style = "narrative"
+doc = "notice-2027-fee-changes"
+quote = "Until then, the current Business Fee & Rate Schedule (effective July 1, 2026) continues to apply."
+
+[[positive]]
+query = "got an email saying some fees are going up, do i need to do anything to stay on my plan"
+style = "customer"
+doc = "notice-2027-fee-changes"
+quote = "You don't need to do anything to keep your current plan and services."
+
+[[positive]]
+query = "cust wants a biz loan or LOC for new equipment, do we offer that"
+style = "shorthand"
+doc = "products-overview"
+quote = "Loans or lines of credit."
+
+[[positive]]
+query = "if a payment comes in and I don't have enough money in the account do you guys cover it??"
+style = "customer"
+doc = "products-overview"
+quote = "Payments presented without enough funds in your account are returned unpaid, and a returned item (NSF) fee applies to each one, up to 3 fees per business day."
+
+[[positive]]
+query = "does the essentals plan come with mobile deposit or just the higher plans"
+style = "typo"
+doc = "products-overview"
+quote = "Every plan includes Online Banking, the MBFS app, mobile deposit and the Bridge Business Debit Mastercard."
+
+[[positive]]
+query = "Sole prop has about $200k in his business checking with us and another $90k in a personal savings at Lanternstone in his name only. He wants to know if all of it is FDIC insured."
+style = "narrative"
+doc = "products-overview"
+quote = "For a sole proprietor, business deposits are combined with the owner's personal single-ownership accounts at Lanternstone Bank toward the same $250,000 limit."
+
+[[positive]]
+query = "is my money still insured if MerchantBridge itself goes under?"
+style = "customer"
+doc = "products-overview"
+quote = "FDIC insurance protects against the failure of Lanternstone Bank, not the failure of MerchantBridge."
+
+[[positive]]
+query = "what are your phone support hours on weekends, are you open sundys"
+style = "typo"
+doc = "products-overview"
+quote = "Business Support: 1-800-555-0142, Monday–Friday 7:00 AM–10:00 PM ET and Saturday 9:00 AM–6:00 PM ET; closed Sunday."
+
+[[positive]]
+query = "Caller owns a hair salon and wants a terminal that prints receipts and lets clients add a tip, without having to run it off her phone. Which one fits?"
+style = "narrative"
+doc = "products-overview"
+quote = "the BridgeTerminal Pro, with a built-in receipt printer, Wi-Fi and LTE, tipping and a PIN pad"
+
+[[positive]]
+query = "max # of employee cards on a biz acct"
+style = "shorthand"
+doc = "products-overview"
+quote = "add up to 10 employee cards with spend controls"
+
+[[positive]]
+query = "how much does a customer need to keep in the acount to avoid the monthly fee on Plus"
+style = "typo"
+doc = "business-checking-plans"
+quote = "Bridge Plus: an average daily balance of at least $10,000."
+
+[[positive]]
+query = "Essentials cust averaged around $1,800 this cycle but had about $1,400 in card sales paid out to the account. Do they still get charged the monthly fee?"
+style = "narrative"
+doc = "business-checking-plans"
+quote = "at least $1,000 in MBFS card-processing deposits (payouts of your card sales) during the statement cycle. Meeting either requirement waives the fee."
+
+[[positive]]
+query = "Premier cust keeps about $35k in checking and $20k in Reserve Savings. Does the savings count toward the Premier fee waiver?"
+style = "narrative"
+doc = "business-checking-plans"
+quote = "Bridge Premier: a combined average daily balance of at least $50,000 across all of your MBFS business accounts, including Bridge Reserve Savings."
+
+[[positive]]
+query = "how do you guys figure out my average balance? is it just whatever's in there at the end of the month?"
+style = "customer"
+doc = "business-checking-plans"
+quote = "Average daily balance is the sum of your end-of-day balances for each day in the statement cycle, divided by the number of days in the statement cycle."
+
+[[positive]]
+query = "cust asking what EXCESS ITEM FEE on stmt is"
+style = "shorthand"
+doc = "business-checking-plans"
+quote = "each transaction beyond the plan's allowance is charged the excess transaction fee (EXCESS ITEM FEE on your statement)"
+
+[[positive]]
+query = "premier - do we reimburse out of network ATM fees? how many/cycle"
+style = "shorthand"
+doc = "business-checking-plans"
+quote = "up to 4 out-of-network ATM fees rebated per statement cycle"
+
+[[positive]]
+query = "does the plus plan come with free ACH paymnets or do those cost extra"
+style = "typo"
+doc = "business-checking-plans"
+quote = "Standard ACH origination for the first 100 payments per statement cycle"
+
+[[positive]]
+query = "if I upgrade to Plus today will my payouts start coming faster tomorrow?"
+style = "customer"
+doc = "business-checking-plans"
+quote = "The new plan takes effect at the start of your next statement cycle."
+
+[[positive]]
+query = "does business checking earn any interst or only the savings account"
+style = "typo"
+doc = "business-checking-plans"
+quote = "Bridge business checking accounts do not earn interest."
+
+[[positive]]
+query = "reserve savings rate for cust w/ 15k bal"
+style = "shorthand"
+doc = "business-savings"
+quote = "Tier: 2; End-of-day balance: $10,000.00 – $49,999.99; Interest rate: 2.23%; APY: 2.25%"
+
+[[positive]]
+query = "Cust has roughly $55k in Reserve Savings and thinks only the part over $50k earns the higher rate. Is that right or does the whole balance get it?"
+style = "narrative"
+doc = "business-savings"
+quote = "Rates are not blended: your whole balance earns the rate of one tier."
+
+[[positive]]
+query = "when do I actually get paid the interest on my savings, every month or once a year?"
+style = "customer"
+doc = "business-savings"
+quote = "Interest is compounded daily and credited to your account monthly."
+
+[[positive]]
+query = "Merchant moved money out of savings 8 times this cycle to cover payroll. What will the extra withdrawals cost them?"
+style = "narrative"
+doc = "business-savings"
+quote = "Each withdrawal beyond 6 in the same statement cycle is charged $10.00 (EXCESS WITHDRAWAL FEE on your statement)."
+
+[[positive]]
+query = "so if my savings goes under $1,000 for even one day I get the $5 fee??"
+style = "customer"
+doc = "business-savings"
+quote = "so the fee is waived only when your balance ends every day of the cycle at $1,000 or more"
+
+[[positive]]
+query = "cust asking abt 1099-INT on savings, min interest to get one"
+style = "shorthand"
+doc = "business-savings"
+quote = "If your Bridge Reserve Savings account earns $10 or more in interest during the tax year, MBFS issues Form 1099-INT."
+
+[[positive]]
+query = "can someone open just the savings acount without having checking with us"
+style = "typo"
+doc = "business-savings"
+quote = "A Bridge Reserve Savings account must be linked to an MBFS business checking account on Bridge Essentials, Bridge Plus or Bridge Premier."
+
+[[positive]]
+query = "is the savings rate locked in once its opened or can it chnage"
+style = "typo"
+doc = "business-savings"
+quote = "Rates may change at any time after the account is opened."
+
+[[positive]]
+query = "if a sale is ran after 8pm does it go in todays batch or tomorrows"
+style = "typo"
+doc = "payouts-and-settlement"
+quote = "Sales made after 8:00 PM ET are included in the next day's batch."
+
+[[positive]]
+query = "Essentials merchant's batch closed Thursday night. They want to know if the money lands Friday or not until Monday."
+style = "narrative"
+doc = "payouts-and-settlement"
+quote = "Batch closes (8:00 PM ET): Thursday; Bridge Essentials payout arrives: Monday"
+
+[[positive]]
+query = "Plus merchant's batch closes Wednesday the 25th and Thursday is Thanksgiving. When should they expect that payout?"
+style = "narrative"
+doc = "payouts-and-settlement"
+quote = "Federal Reserve holidays are not business days, so they are skipped when counting business days to a payout."
+
+[[positive]]
+query = "Cust wants to push $30k from today's card sales to their debit card with instant payout so they can make rent. Can they do it all today?"
+style = "narrative"
+doc = "payouts-and-settlement"
+quote = "The maximum is $10,000 per Instant Payout and $25,000 per day."
+
+[[positive]]
+query = "CB came in - amt + fee come out of payout or checking?"
+style = "shorthand"
+doc = "payouts-and-settlement"
+quote = "the disputed amount plus the chargeback fee is also deducted from your next payout. If your payouts aren't enough to cover these amounts, they are debited from your checking account instead."
+
+[[positive]]
+query = "cust on rolling reserve, how much held + how long"
+style = "shorthand"
+doc = "payouts-and-settlement"
+quote = "A rolling reserve withholds up to 10% of your daily card volume, and each day's withheld amount is held for up to 90 days before it is released to you."
+
+[[positive]]
+query = "can you just change the bank account my payouts go to? I've got the new routing and account number right here"
+style = "customer"
+doc = "payouts-and-settlement"
+quote = "For your security, a change to the bank account that receives your payouts must be approved in the MBFS app by an owner or admin on your account."
+
+[[positive]]
+query = "how long does an instant payout usualy take to hit the card"
+style = "typo"
+doc = "payouts-and-settlement"
+quote = "Instant Payouts usually arrive within 30 minutes."
+
+[[positive]]
+query = "where do i go in the app to do an instant payout, cant find it"
+style = "typo"
+doc = "help-getting-paid"
+quote = "Sign in to the MerchantBridge app or the Merchant Portal and go to Payouts."
+
+[[positive]]
+query = "I'm on Premier, how much do you charge to send my money to my card right away?"
+style = "customer"
+doc = "help-getting-paid"
+quote = "Bridge Premier: Instant Payouts cost 1.0% of the payout amount, with a $0.50 minimum."
+
+[[positive]]
+query = "Essentials cust wants an instant payout of just $20 to cover a small bill. What would the fee be on that?"
+style = "narrative"
+doc = "help-getting-paid"
+quote = "The $0.50 minimum applies whenever the percentage fee would be less than $0.50."
+
+[[positive]]
+query = "can the instant payouts go to my personal debit card instead of a business one?"
+style = "customer"
+doc = "help-getting-paid"
+quote = "It must be an eligible debit card in your business's name."
+
+[[positive]]
+query = "essentials cust weekend sales - what day does payout hit"
+style = "shorthand"
+doc = "help-getting-paid"
+quote = "payouts for weekend sales arrive on Wednesday on Bridge Essentials and on Tuesday on Bridge Plus and Bridge Premier"
+
+[[positive]]
+query = "new merchant, how long til 1st payout"
+style = "shorthand"
+doc = "help-getting-paid"
+quote = "If you're new to MerchantBridge, your first payout may take up to 5 business days while we verify your account."
+
+[[positive]]
+query = "merchant got a chargeback notice Friday afternoon, do Saturday and Sunday count against their response window or is it business days only"
+style = "narrative"
+doc = "chargebacks-and-disputes"
+quote = "The 10 calendar days are counted from the notification date, including weekends and holidays."
+
+[[positive]]
+query = "what happens if the merchant just ignores a chargback and never responds"
+style = "typo"
+doc = "chargebacks-and-disputes"
+quote = "If you don't accept or respond by the deadline, the chargeback is automatically accepted and the disputed funds are not returned."
+
+[[positive]]
+query = "if the bank ends up siding with me do I still have to pay that chargeback fee??"
+style = "customer"
+doc = "chargebacks-and-disputes"
+quote = "The fee is non-refundable regardless of the outcome, even if you win."
+
+[[positive]]
+query = "merch got a retrieval request not a CB yet, how long to answer"
+style = "shorthand"
+doc = "chargebacks-and-disputes"
+quote = "A complete answer within 7 calendar days can resolve the issuer's question before it becomes a chargeback."
+
+[[positive]]
+query = "what kind of proof shoud a merchant send in to fight a chargeback"
+style = "typo"
+doc = "chargebacks-and-disputes"
+quote = "Proof of delivery or shipment tracking"
+
+[[positive]]
+query = "I sent in all my proof to fight the chargeback, how long does the bank usually take to decide?"
+style = "customer"
+doc = "chargebacks-and-disputes"
+quote = "Typically 30 to 75 days after we submit"
+
+[[positive]]
+query = "merchant's buyer filed a chargeback on a $180 order and the merchant wants to just refund the $180 to make it go away, is that ok"
+style = "narrative"
+doc = "chargebacks-and-disputes"
+quote = "Don't refund a sale that has already been charged back."
+
+[[positive]]
+query = "cust w/ high CB rate, whats the threshold before we put them in monitoring or hold a reserve"
+style = "shorthand"
+doc = "chargebacks-and-disputes"
+quote = "If your chargebacks are above 1% of your monthly transactions for two consecutive months"
+
+[[positive]]
+query = "merchant fought a chargeback and lost the first round, now it's going to arbitration with the card network, what costs could they get hit with"
+style = "narrative"
+doc = "chargebacks-and-disputes"
+quote = "Arbitration fees: card-network arbitration fees, often $500 or more, are passed through to you."
+
+[[positive]]
+query = "where does merch go to respond to a dispute, which tab in portal"
+style = "shorthand"
+doc = "chargebacks-and-disputes"
+quote = "Sign in to the Merchant Portal and open the Disputes tab."
+
+[[positive]]
+query = "if cust locks card can they still pull cash at atm"
+style = "shorthand"
+doc = "card-security-and-fraud"
+quote = "While the card is locked, new purchases and ATM withdrawals are declined."
+
+[[positive]]
+query = "got a weird email saying it's from you guys asking me to confirm my card info, where do I report it?"
+style = "customer"
+doc = "card-security-and-fraud"
+quote = "Forward suspicious emails to phishing@merchantbridge.example."
+
+[[positive]]
+query = "how long does a customer have to dispte a debit card charge they didnt make"
+style = "typo"
+doc = "card-security-and-fraud"
+quote = "dispute the transaction within 60 days of the statement date on which it first appeared"
+
+[[positive]]
+query = "how long till I get my money back while you guys look into the fraud charges?"
+style = "customer"
+doc = "card-security-and-fraud"
+quote = "Provisional credit for eligible claims is typically issued within 10 business days while we investigate."
+
+[[positive]]
+query = "does reg E cover biz debit cards"
+style = "shorthand"
+doc = "card-security-and-fraud"
+quote = "Federal Regulation E consumer protections do not apply to business accounts."
+
+[[positive]]
+query = "merchant just spotted a $1,200 ACH pull from a company they never authorized, it posted this morning, how fast do they need to report it"
+style = "narrative"
+doc = "card-security-and-fraud"
+quote = "For an ACH debit you didn't authorize, notify us within 1 business day of posting"
+
+[[positive]]
+query = "am I on the hook for whatever the thief bought with my card?"
+style = "customer"
+doc = "card-security-and-fraud"
+quote = "Mastercard Zero Liability protection applies to unauthorized purchases made with your card that you report promptly."
+
+[[positive]]
+query = "buyer paid a merchant with a $2,500 cashier's check on a $1,500 order and wants the extra $1,000 wired to his shipping agent, funds already show available, safe to send?"
+style = "narrative"
+doc = "card-security-and-fraud"
+quote = "Do not send money back until the original payment has fully cleared and can no longer be reversed."
+
+[[positive]]
+query = "someone called pretending to be merchantbridge and the customer gave them there one time code, what should they do now"
+style = "typo"
+doc = "card-security-and-fraud"
+quote = "If you have already shared these details, lock your card and call us right away."
+
+[[positive]]
+query = "customer thinks the card is probly just somewhere at home, should they cancel it or just lock it"
+style = "typo"
+doc = "help-lost-or-stolen-card"
+quote = "Not sure whether the card is lost or just misplaced? Lock it first."
+
+[[positive]]
+query = "found my card in my jacket pocket lol, I had locked it earlier, can I just turn it back on?"
+style = "customer"
+doc = "help-lost-or-stolen-card"
+quote = "If you find the card before you report it, unlock it to restore it."
+
+[[positive]]
+query = "one of the merchant's cashiers lost her employee card on a supply run this afternoon, does the owner have to handle it or can she sort it out on her own"
+style = "narrative"
+doc = "help-lost-or-stolen-card"
+quote = "If an employee loses their card, they can lock and replace their own card in the app."
+
+[[positive]]
+query = "cost to expedite replacement card, cust on Plus"
+style = "shorthand"
+doc = "help-lost-or-stolen-card"
+quote = "Expedited replacement (2 business days): $25.00 on Bridge Essentials and Bridge Plus; free on Bridge Premier."
+
+[[positive]]
+query = "customer's replacment card hasnt come in the mail yet, can she use it on her phone in the meantime"
+style = "typo"
+doc = "help-lost-or-stolen-card"
+quote = "You can add your new card to Apple Pay or Google Pay right away, before the plastic card arrives in the mail."
+
+[[positive]]
+query = "how can I tell if a gas pump has one of those skimmer things on it?"
+style = "customer"
+doc = "help-lost-or-stolen-card"
+quote = "A card slot that looks loose, bulky, crooked, or different from the reader on the next pump or machine. Give it a gentle wiggle; a genuine reader shouldn't move."
+
+[[positive]]
+query = "merchant wants to refund a sale from back in May, so about five months ago, can they still do it"
+style = "narrative"
+doc = "help-refunds"
+quote = "Refunds can be issued only within 120 days of the original sale. If you need help with an older sale, call Business Support at 1-800-555-0142."
+
+[[positive]]
+query = "merchant alredy refunded $40 on a $100 sale, whats the most they can still refund on it"
+style = "typo"
+doc = "help-refunds"
+quote = "You can't refund more than the original sale amount. Partial refunds count toward that total."
+
+[[positive]]
+query = "if I refund a customer do I at least get back the fee you took on the original sale?"
+style = "customer"
+doc = "help-refunds"
+quote = "Processing fees from the original sale are not returned when you issue a refund."
+
+[[positive]]
+query = "refund > next payout, where does the rest get pulled from"
+style = "shorthand"
+doc = "help-refunds"
+quote = "If that payout isn't large enough to cover the refund, the rest is deducted from your MerchantBridge business checking balance."
+
+[[positive]]
+query = "how does a merchant refund a sale in the merchant protal"
+style = "typo"
+doc = "help-refunds"
+quote = "Go to Transactions and open the original sale."
+
+[[positive]]
+query = "merch on bridgeterminal mini wants to refund a sale, where do they do it"
+style = "shorthand"
+doc = "help-refunds"
+quote = "If you use a BridgeTerminal Mini, do this in the MerchantBridge app on the phone paired with your Mini."
+
+[[positive]]
+query = "my customer says the refund still isn't on her card, how long does that normally take?"
+style = "customer"
+doc = "help-refunds"
+quote = "Customers usually see a refund on their card account in 5–10 business days, depending on their card issuer."
+
+[[positive]]
+query = "customer paid $60 by card and the merchant wants to give the refund in cash from the register instead, any problem with that"
+style = "narrative"
+doc = "help-refunds"
+quote = "A cash refund doesn't appear on the customer's card account, so the customer could still dispute the original charge with their card issuer."
+
+[[positive]]
+query = "is there anywhere I can take out cash without paying an ATM fee?"
+style = "customer"
+doc = "help-business-debit-card"
+quote = "Withdraw cash surcharge-free at any ATM in the Allpoint network."
+
+[[positive]]
+query = "whats the fee if they use an atm outside allpiont"
+style = "typo"
+doc = "help-business-debit-card"
+quote = "Withdrawals at ATMs outside the Allpoint network have a $2.50 out-of-network ATM fee, plus any surcharge the ATM operator charges."
+
+[[positive]]
+query = "premier cust, do we reimburse OON atm fees"
+style = "shorthand"
+doc = "help-business-debit-card"
+quote = "On Bridge Premier, we rebate up to 4 out-of-network ATM fees per statement cycle."
+
+[[positive]]
+query = "merchant on Essentials orders supplies online from a Canadian supplier, never leaves the US, would the foreign transaction fee still apply"
+style = "narrative"
+doc = "help-business-debit-card"
+quote = "Online purchases from merchants based outside the U.S. may also be processed abroad, so the foreign transaction fee can apply to those purchases too."
+
+[[positive]]
+query = "daily atm withdrawal max on biz debit pls"
+style = "shorthand"
+doc = "help-business-debit-card"
+quote = "The daily ATM withdrawal limit is $1,000 on every plan."
+
+[[positive]]
+query = "what's the daily spending limt on a premier debit card"
+style = "typo"
+doc = "help-business-debit-card"
+quote = "Your daily purchase limit depends on your plan: $10,000 on Bridge Essentials and Bridge Plus, and $25,000 on Bridge Premier."
+
+[[positive]]
+query = "owner is handing a new hire an employee card for picking up inventory and doesn't want him seeing how much money is in the account, can employees see the balance"
+style = "narrative"
+doc = "help-business-debit-card"
+quote = "Employees can lock their own card, request a replacement, and see recent transactions on their card. They can't see account balances."
+
+[[positive]]
+query = "cust needs dom wire out today, whats the cutoff ET"
+style = "shorthand"
+doc = "wire-transfers"
+quote = "Domestic wires: 4:00 PM ET"
+
+[[positive]]
+query = "cust sent wire to wrong acct this am, can we get it back"
+style = "shorthand"
+doc = "wire-transfers"
+quote = "If a wire was sent in error or because of fraud, MerchantBridge can request a recall from the receiving bank, but the return of funds is not guaranteed and depends on the beneficiary bank."
+
+[[positive]]
+query = "biz wants to send intl wire in pesos not USD, possible"
+style = "shorthand"
+doc = "wire-transfers"
+quote = "Outgoing international wires can be sent in U.S. dollars or in a foreign currency."
+
+[[positive]]
+query = "my supplier overseas says they got less than I sent them?? where did the rest of my money go"
+style = "customer"
+doc = "wire-transfers"
+quote = "Intermediary or correspondent banks may deduct their own fees as an international wire passes through them, so the amount that arrives may be less than the amount sent."
+
+[[positive]]
+query = "my CEO just emailed me to wire 18k to a new vendor account asap and said to keep it between us. is that normal??"
+style = "customer"
+doc = "wire-transfers"
+quote = "Slow down when a request is urgent or confidential. Pressure to act quickly or to keep a payment quiet is a common warning sign."
+
+[[positive]]
+query = "Owner keyed a wire to a supplier in Canada at 1:40 PM ET, but her business needs a second person to sign off and her partner didn't approve it until 2:20. Does it still go out today?"
+style = "narrative"
+doc = "wire-transfers"
+quote = "If your business uses dual approval, the second approval must also be completed before the cut-off. Wires submitted or approved after the cut-off are processed on the next business day."
+
+[[positive]]
+query = "Merchant on Bridge Essentials has to pay a contractor $40,000 by wire today. Can they send it all in one wire?"
+style = "narrative"
+doc = "wire-transfers"
+quote = "Plan: Bridge Essentials; Daily outgoing wire limit: $25,000"
+
+[[positive]]
+query = "what info do i need from a vendor to wire them money overseas, do they need a swift code or a routing numer"
+style = "typo"
+doc = "wire-transfers"
+quote = "ABA routing number (domestic wires) or SWIFT/BIC code (international wires)"
+
+[[positive]]
+query = "vendor emailed us new bank detials for their wire payments, how do we know its legit"
+style = "typo"
+doc = "wire-transfers"
+quote = "Verify new or changed wire instructions by phone. Call a phone number you already know, such as one from a contract or an earlier invoice"
+
+[[positive]]
+query = "SDA cutoff time, cust wants payroll to land today"
+style = "shorthand"
+doc = "ach-payments"
+quote = "Option: Same-day ACH; Submit by (on a business day): 2:45 PM ET; Settles: The same business day"
+
+[[positive]]
+query = "cust wants stop pmt on a vendor ach debit scheduled next wk, how much notice"
+style = "shorthand"
+doc = "ach-payments"
+quote = "ACH debits: place the request at least 3 business days before the scheduled debit."
+
+[[positive]]
+query = "one of my customers' ACH payments bounced and now you took the money back out of my account?? and charged me a fee on top??"
+style = "customer"
+doc = "ach-payments"
+quote = "MerchantBridge reverses the credit we gave you for that payment and charges the ACH return fee."
+
+[[positive]]
+query = "there's a withdrawal on my account from some company I've never heard of, it says ACH. I never agreed to this, what do I do"
+style = "customer"
+doc = "ach-payments"
+quote = "If an ACH debit you didn't authorize posts to your MerchantBridge account, notify us within 1 business day of the posting by calling Business Support at 1-800-555-0142."
+
+[[positive]]
+query = "Customer on Bridge Plus is paying 40 vendors in one same-day ACH batch - are they charged the same-day fee 40 times or just once?"
+style = "narrative"
+doc = "ach-payments"
+quote = "Fee: Same-day ACH; Code: ACH-02; Statement descriptor: SAME DAY ACH FEE; Charged: Per batch"
+
+[[positive]]
+query = "can a customer still reverse an ach debit we pulled from thier account 6 weeks ago"
+style = "typo"
+doc = "ach-payments"
+quote = "Consumer payers can return your debits as unauthorized for up to 60 days (return code R10), so debits from consumer accounts carry a longer return risk."
+
+[[positive]]
+query = "if 5 paymets bounce on the same day do they get charged the nsf fee all 5 times"
+style = "typo"
+doc = "ach-payments"
+quote = "We charge a maximum of 3 returned item fees per business day."
+
+[[positive]]
+query = "max hold on a chk deposit - how many biz days"
+style = "shorthand"
+doc = "funds-availability"
+quote = "In some situations, we may hold funds from a check deposit for up to 7 business days."
+
+[[positive]]
+query = "I literally just opened my account 2 weeks ago, are my checks going to take longer because I'm new?"
+style = "customer"
+doc = "funds-availability"
+quote = "Your account is new, during its first 30 days."
+
+[[positive]]
+query = "if the money from a check shows up in my balance that means it cleared right? I want to pay my vendor with it"
+style = "customer"
+doc = "funds-availability"
+quote = "Available funds are not a guarantee that a check has been paid."
+
+[[positive]]
+query = "Merchant deposited a $1,800 check on Saturday afternoon. Does it count as Saturday's deposit, and when can they actually use the money?"
+style = "narrative"
+doc = "funds-availability"
+quote = "A check deposited on a Saturday is considered received on Monday, so the same Tuesday and Wednesday timing applies."
+
+[[positive]]
+query = "Contractor is depositing four customer checks today worth about $7,400 total. Will all of it be available on the normal schedule or could some get held?"
+style = "narrative"
+doc = "funds-availability"
+quote = "Your check deposits total more than $6,725 in one day."
+
+[[positive]]
+query = "what time dose a check deposit have to be in by to count for today"
+style = "typo"
+doc = "funds-availability"
+quote = "A check deposit made by 7:00 PM ET on a business day is considered received that day."
+
+[[positive]]
+query = "when money comes in by ach or wire is it avalable right away or held like checks"
+style = "typo"
+doc = "funds-availability"
+quote = "Electronic deposits, including ACH credits and incoming wires: available the same business day."
+
+[[positive]]
+query = "RDC endorsement - what exactly does cust need to write on the back"
+style = "shorthand"
+doc = "help-mobile-deposit"
+quote = "On the back, sign your name and write \"For mobile deposit only at MerchantBridge\"."
+
+[[positive]]
+query = "chk ripped + MICR line smudged, will mobile dep take it"
+style = "shorthand"
+doc = "help-mobile-deposit"
+quote = "The check is damaged or altered, or the numbers along the bottom of the check can't be read."
+
+[[positive]]
+query = "do I have to put in the exact amount? the check is for $1,249.50 and I just typed 1250"
+style = "customer"
+doc = "help-mobile-deposit"
+quote = "Choose the account to deposit to, and enter the check amount exactly as it's written on the check."
+
+[[positive]]
+query = "whats the trick to taking the check picture? it keeps getting rejected"
+style = "customer"
+doc = "help-mobile-deposit"
+quote = "Place the check on a dark, flat surface in good light and photograph the front and back."
+
+[[positive]]
+query = "Customer mobile deposited a $900 check at 3 PM ET on Wednesday, no holidays this week. How much can they spend Thursday and when is the rest there?"
+style = "narrative"
+doc = "help-mobile-deposit"
+quote = "For checks deposited by 7:00 PM ET on a business day, the first $275 is available the next business day, and the rest is available by the second business day."
+
+[[positive]]
+query = "Merchant on Bridge Essentials got a $6,500 check from a client and wants to deposit it in the app today. Will it go through?"
+style = "narrative"
+doc = "help-mobile-deposit"
+quote = "Plan: Bridge Essentials; Daily limit (per business day): $5,000; Limit per statement cycle: $20,000"
+
+[[positive]]
+query = "if the app rejects a check can i just try agian or do i have to do something else"
+style = "typo"
+doc = "help-mobile-deposit"
+quote = "Most issues can be fixed by retaking the photos or correcting the endorsement or amount, then submitting the check again."
+
+[[positive]]
+query = "whats the fee if a check i depositted in the app bounces"
+style = "typo"
+doc = "help-mobile-deposit"
+quote = "If a check you deposited is returned unpaid, the deposit is reversed and a deposited item returned fee of $12.00 applies."
+
+[[positive]]
+query = "cust wants to disable 2FA, hates the codes"
+style = "shorthand"
+doc = "help-online-banking-security"
+quote = "Two-step verification is required for every user and can't be turned off."
+
+[[positive]]
+query = "cust forgot pw, how do they reset"
+style = "shorthand"
+doc = "help-online-banking-security"
+quote = "On the sign-in page, select Forgot password."
+
+[[positive]]
+query = "why does it keep kicking me out every time I walk away for a few minutes?? so annoying"
+style = "customer"
+doc = "help-online-banking-security"
+quote = "Sessions time out after 15 minutes of inactivity. Sign in again to continue."
+
+[[positive]]
+query = "I just got a text with a login code but I wasn't logging in?? is somebody trying to hack me"
+style = "customer"
+doc = "help-online-banking-security"
+quote = "If you get a verification code you didn't request, don't share it with anyone, and change your password. Someone may be trying to sign in as you."
+
+[[positive]]
+query = "I've got a customer on the phone right now and they just got a pop-up in the MBFS app asking them to confirm the call. They're nervous it's a scam - should they hit approve?"
+style = "narrative"
+doc = "help-online-banking-security"
+quote = "Approve it only if you called us and are on the line with an agent."
+
+[[positive]]
+query = "Owner says their office manager quit yesterday and wants us to delete her login over the phone right now."
+style = "narrative"
+doc = "help-online-banking-security"
+quote = "For your protection, changes to users, your payout bank account, or your contact email or phone number must be approved in the MerchantBridge app by an owner or admin."
+
+[[positive]]
+query = "i lost my phone that has the authentcator app, how do i log in now"
+style = "typo"
+doc = "help-online-banking-security"
+quote = "If you lose the phone you use for passcodes, call Business Support at 1-800-555-0142."
+
+[[positive]]
+query = "customer put there password into a fake sign in page from a text, what should they do now"
+style = "typo"
+doc = "help-online-banking-security"
+quote = "If you entered your password or a passcode on a suspicious site, reset your password right away and call Business Support."
+
+[[positive]]
+query = "can a buisness apply with just a PO box for there address"
+style = "typo"
+doc = "account-opening-kyc"
+quote = "The business must have a US physical address. P.O. boxes are not accepted."
+
+[[positive]]
+query = "my dispensary is fully licensed by the state so why can't I get an account with you guys??"
+style = "customer"
+doc = "account-opening-kyc"
+quote = "These businesses are prohibited even when they are licensed or legal under state law."
+
+[[positive]]
+query = "I applied yesterday, how long until I find out if I'm approved?"
+style = "customer"
+doc = "account-opening-kyc"
+quote = "Most applications are decided within 1 business day. Applications that need additional review can take up to 5 business days"
+
+[[positive]]
+query = "two partners own an LLC 60/40 and they've hired a CEO who owns none of it. who all has to be verified to open the account?"
+style = "narrative"
+doc = "account-opening-kyc"
+quote = "Business type: LLC; Individuals we verify: Each beneficial owner (25% or more) plus one controlling person"
+
+[[positive]]
+query = "what paperwork does a sole propriter need if they use a diffrent business name"
+style = "typo"
+doc = "account-opening-kyc"
+quote = "Tax ID and documents: SSN or EIN; a DBA (\"doing business as\") certificate if you trade under another name"
+
+[[positive]]
+query = "gun store applying for biz acct - ok to tell them theyll be approved"
+style = "shorthand"
+doc = "account-opening-kyc"
+quote = "MerchantBridge support agents must not promise approval for a restricted business type and must route the applicant to the Onboarding team"
+
+[[positive]]
+query = "can the owner use an ITIN if they dont have a social secuirty number"
+style = "typo"
+doc = "account-opening-kyc"
+quote = "Taxpayer identification number (TIN): a Social Security number (SSN) or an Individual Taxpayer Identification Number (ITIN)"
+
+[[positive]]
+query = "cust closing acct 2 mos after opening, any fee"
+style = "shorthand"
+doc = "account-closure"
+quote = "If the account is closed within 90 days of opening, an early account closure fee of $50.00 per account applies"
+
+[[positive]]
+query = "I closed my account by mistake last week, can you just turn it back on?"
+style = "customer"
+doc = "account-closure"
+quote = "A closed account cannot be reopened. To bank or process payments with MerchantBridge again, submit a new application"
+
+[[positive]]
+query = "merchant is closing their account at the end of the month but ran about $40k in card sales the last few weeks. will we hold back part of the final payout for chargebacks, and for how long?"
+style = "narrative"
+doc = "account-closure"
+quote = "MerchantBridge may retain a reserve from your final payouts for up to 120 days after closure"
+
+[[positive]]
+query = "what happens to the money left in the acount once it's closed"
+style = "typo"
+doc = "account-closure"
+quote = "Any balance left at closure is sent to you by check to the address on file or to a verified external account"
+
+[[positive]]
+query = "I haven't touched the account in a year but you've been charging me fees the whole time, doesn't that count as using it??"
+style = "customer"
+doc = "account-closure"
+quote = "Fees we charge to the account do not count as activity."
+
+[[positive]]
+query = "my old account sat untouched for years and now I'm told the money went to the state?? how do I get it back"
+style = "customer"
+doc = "account-closure"
+quote = "You would then claim them from the state's unclaimed property program, not from MerchantBridge."
+
+[[positive]]
+query = "PCI nonval fee apply to premier accts too"
+style = "shorthand"
+doc = "pci-compliance"
+quote = "PCI non-validation fee: $19.95 per month on every plan, including Bridge Premier, if your annual SAQ is not completed within 60 days of its due date."
+
+[[positive]]
+query = "I did the PCI questionnaire on time, so why am I still getting a $99 charge??"
+style = "customer"
+doc = "pci-compliance"
+quote = "Completing your SAQ on time avoids the non-validation fee, but it does not replace the annual program fee on Bridge Essentials or Bridge Plus."
+
+[[positive]]
+query = "nail salon only takes cards on their BridgeTerminal Pros, but they started sending invoices this month. can they still do the P2PE SAQ?"
+style = "narrative"
+doc = "pci-compliance"
+quote = "If you also accept card payments online or by invoice, SAQ P2PE does not apply, and you complete the SAQ that matches your full setup."
+
+[[positive]]
+query = "is it ok to keep customers card numbers in a spreadsheat for repeat orders"
+style = "typo"
+doc = "pci-compliance"
+quote = "Never store full card numbers, CVV codes (the security code printed on the card), or PINs, whether on paper, in spreadsheets or files, in email or text messages, or in photos."
+
+[[positive]]
+query = "there's a weird plastic thing stuck on my card reader that wasn't there yesterday, what do I do??"
+style = "customer"
+doc = "pci-compliance"
+quote = "Suspected exposure: if you think card data at your business may have been exposed, or a terminal may have been tampered with, contact Business Support right away."
+
+[[positive]]
+query = "cust bought pro terminal 8 mos ago, now dead - covered under warranty?"
+style = "shorthand"
+doc = "help-terminals"
+quote = "Purchased terminals are covered by a 1-year warranty."
+
+[[positive]]
+query = "how much is it a month if I rent a card reader instead of buying one?"
+style = "customer"
+doc = "help-terminals"
+quote = "Feature: Monthly rental; BridgeTerminal Mini: $15.00 per month; BridgeTerminal Pro: $39.00 per month"
+
+[[positive]]
+query = "merchant's Mini keeps dropping the connection to their phone. they restarted it twice, Bluetooth is turned on and they have the latest app version. what else can they try?"
+style = "narrative"
+doc = "help-terminals"
+quote = "If the Mini still won't connect, remove it from the app's paired devices and pair it again."
+
+[[positive]]
+query = "i threw out the return lable for the rented terminal, how do i get another one"
+style = "typo"
+doc = "help-terminals"
+quote = "If you've lost your return label, call Business Support and we'll send you a new one."
+
+[[positive]]
+query = "can my customers leave a tip on the little bluetooth reader?"
+style = "customer"
+doc = "help-terminals"
+quote = "Feature: Tipping and PIN pad on the device; BridgeTerminal Mini: No; BridgeTerminal Pro: Yes"
+
+[[positive]]
+query = "why is my 1099-K so much higher than what actually got deposited?"
+style = "customer"
+doc = "help-tax-forms"
+quote = "Your 1099-K shows the gross amount of your card payments for the year, before refunds, chargebacks, and processing fees are subtracted"
+
+[[positive]]
+query = "food truck only did about $9k in card sales this year, maybe 150 transactions. owner read you don't get a 1099-K under $20,000 - will they get one from us?"
+style = "narrative"
+doc = "help-tax-forms"
+quote = "The TPSO thresholds don't apply to card payments processed by a merchant acquirer like MerchantBridge, so you'll receive a Form 1099-K for your card payments whatever your total for the year."
+
+[[positive]]
+query = "cust has backup withholding on payouts, how to get it stopped"
+style = "shorthand"
+doc = "help-tax-forms"
+quote = "submit a corrected Form W-9 in the Merchant Portal under Settings > Tax information. Backup withholding stops once we receive your corrected W-9."
+
+[[positive]]
+query = "when can i downlaod my 1099 from the portal"
+style = "typo"
+doc = "help-tax-forms"
+quote = "Your Form 1099-K and Form 1099-INT for the previous tax year are available in the Merchant Portal by January 31."
+
+[[positive]]
+query = "will I get a tax form for the interest on my checking?"
+style = "customer"
+doc = "help-tax-forms"
+quote = "Bridge business checking accounts don't earn interest, so they don't generate a Form 1099-INT."
+
+[[positive]]
+query = "cust cant approve push prompt, phone dead - other way to verify"
+style = "shorthand"
+doc = "caller-verification-sop"
+quote = "If the caller cannot approve the prompt in the app, ask for the amount of one transaction on the account from the last 30 days."
+
+[[positive]]
+query = "caller failed verfication twice, what do i do next"
+style = "typo"
+doc = "caller-verification-sop"
+quote = "Transfer the call to the Fraud team."
+
+[[positive]]
+query = "outside accountant is calling for the client's last 3 statements. says the owner is fine with it but they aren't set up as a user on the account. can I help them?"
+style = "narrative"
+doc = "caller-verification-sop"
+quote = "If the caller is not an authorized user on the account, such as an outside bookkeeper or accountant who has not been added, you cannot verify them and must not discuss the account."
+
+[[positive]]
+query = "owner passed verification and wants me to switch the bank account their payouts go to since they're changing banks today. can I just update it for them?"
+style = "narrative"
+doc = "caller-verification-sop"
+quote = "Never complete these changes over the phone, even for a verified owner or admin."
+
+[[positive]]
+query = "employee w/ biz debit card asking for acct balance, ok to give"
+style = "shorthand"
+doc = "caller-verification-sop"
+quote = "Their own card only: lock it, replace it, and review recent transactions on that card; Limits: No account balances, and nothing beyond their own card"
+
+[[positive]]
+query = "caller started reading out their OTP, do i put it in case notes"
+style = "shorthand"
+doc = "caller-verification-sop"
+quote = "If a caller starts to read one out, stop them and do not record it in the case."
+
+[[positive]]
+query = "cust wants NSF fee credited back, 1st one, ok w/o sup approval"
+style = "shorthand"
+doc = "agent-handling-guidelines"
+quote = "You may reverse one monthly maintenance fee and one returned item (NSF) fee per account per rolling 12 months without supervisor approval, if the account is in good standing."
+
+[[positive]]
+query = "merchant won their chargeback dispute last week and now wants the chargeback fee refunded since they were in the right. can I credit it?"
+style = "narrative"
+doc = "agent-handling-guidelines"
+quote = "The chargeback fee is non-refundable regardless of the dispute outcome, even when the merchant wins."
+
+[[positive]]
+query = "cust's payouts have been on hold since Monday and they keep asking if it's because of a big order from overseas. what do I tell them?"
+style = "narrative"
+doc = "agent-handling-guidelines"
+quote = "Do not speculate about why funds are held, even if the customer suggests a reason."
+
+[[positive]]
+query = "do i need supervisor aproval to credit a fee thats over $50"
+style = "typo"
+doc = "agent-handling-guidelines"
+quote = "A second reversal of the same fee type within 12 months, or any credit over $50, needs supervisor approval in the case tool."
+
+[[positive]]
+query = "PCI nonval fee reversal req - which team"
+style = "shorthand"
+doc = "agent-handling-guidelines"
+quote = "PCI non-validation fee reversal requests go to Merchant Risk, a different team from Risk Operations."
+
+[[positive]]
+query = "cust got a maintenance fee credited last November and is asking for another one now in October. new calendar year so I can do it without a supervisor, right?"
+style = "narrative"
+doc = "agent-handling-guidelines"
+quote = "Rolling 12 months means the 12 months before the request, not the calendar year."
+
+[[positive]]
+query = "cust asking if we have overdraft protection"
+style = "shorthand"
+doc = "contact-center-glossary"
+quote = "Term: Overdraft; Meaning: Not offered — payments presented without enough funds are returned (returned item / NSF)"
+
+[[positive]]
+query = "cust says a check bounced and wants to know the fee but didn't say if it was one they wrote or one they deposited. which fee do I give them?"
+style = "narrative"
+doc = "contact-center-glossary"
+quote = "For example, a \"bounced check\" can be a check the business wrote (a returned item) or a check it deposited (a deposited item returned), and each has a different fee."
+
+[[positive]]
+query = "what dose UBO mean on the ticket"
+style = "typo"
+doc = "contact-center-glossary"
+quote = "Term: UBO; Meaning: Ultimate beneficial owner"
+
+[[positive]]
+query = "can i just say PRM to the custmer or do i need to spell out the plan name"
+style = "typo"
+doc = "contact-center-glossary"
+quote = "Use the full term with customers, not the shorthand."
+
+[[negative]]
+query = "What is the fee for a money order?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer safe deposit boxes?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the APY on a 12-month certificate of deposit?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the early withdrawal penalty on a CD?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer notary services?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer payroll services for my employees?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Can I set up a 401(k) plan through MerchantBridge?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What insurance products do you sell?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "How much is a stock trade commission?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer a robo-advisor or investment accounts?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "How do I enroll in Zelle?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the fee to send money with Western Union?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer gift card programs for merchants?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the price of a tablet stand for my point of sale?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Can you help me file my quarterly sales tax return?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the weather in New York today?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Who won the football game last night?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is MerchantBridge's stock price?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "How do I reset my Netflix password?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the routing number for Chase Bank?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer travel insurance on business trips?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you buy and sell gold coins?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "How do I order foreign banknotes before a trip?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you offer equipment financing for a new oven?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the minimum credit score to qualify for a mortgage?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "How do I get a business license in Texas?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "Do you provide bookkeeping or accounting software?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "What is the interest rate on a home equity loan?"
+style = "formal"
+kind = "original"
+
+[[negative]]
+query = "weather chicago tmrw, snow?"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "bears score last nite"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "screenshot shortcut win 11"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "cust asking if i know a good plumber in tampa lol"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "crockpot chili recipe easy"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "cheap flights lax to mco thanksgiving wk"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "powerball #s from last nite"
+style = "shorthand"
+kind = "off_topic"
+
+[[negative]]
+query = "do you know if the post office is open on veterans day?? i have to mail something important"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "my grandson set up my new phone and now i cant find any of my pictures, do you know how to get them back"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "my wifi at home keeps dropping every night around 9, is that a comcast thing or my router??"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "omg when does the next iphone come out, mine is literally falling apart"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "random question but what's a good birthday gift for a 10 year old boy lol"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "ok totally random but how long do you cook a 20 lb turkey? first time hosting thanksgiving"
+style = "customer"
+kind = "off_topic"
+
+[[negative]]
+query = "customer mentioned she's flying from atlanta to cancun on the 14th and asked if she needs her passport or if her birth certificate is enough"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "my laptop updated overnight and now my second monitor shows nothing, already unplugged and replugged the hdmi twice, what else can i try"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "caller is on hold waiting for a transfer and asked me who won the yankees game last night, i think it went to extra innings"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "check engine light came on in my 2017 civic this morning, it's not blinking, is it ok to keep driving till my appointment saturday"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "team potluck is friday for about 20 people and i signed up for pulled pork, how many pounds should i buy"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "driving to my sister's in columbus saturday, about 6 hrs, is it better to leave friday night or early saturday to beat traffic"
+style = "narrative"
+kind = "off_topic"
+
+[[negative]]
+query = "hwo many ounces in a cup"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "is daylight savings this weekend, do the clocks go back or foward"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "who won the supr bowl last year"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "how long to cook salmon in the air fyer at 400"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "whats a good movie to wacth on netflix tonight"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "how do i clear the cahce in chrome"
+style = "typo"
+kind = "off_topic"
+
+[[negative]]
+query = "does mbfs offer payroll svc? cust has 8 emps, wants us to run it + do w2s"
+style = "shorthand"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "cust needs a doc notarized, do we have a notary"
+style = "shorthand"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "lockbox svc for mailed in checks? cust gets ~200/mo"
+style = "shorthand"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "cust needs medallion sig guarantee to transfer stock, can we do it"
+style = "shorthand"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "armored car pickup avail? cust has 2 restaurants, lots of cash"
+style = "shorthand"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "is there any way to invest some of the business money in stocks or ETFs through you guys?"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "do you guys sell general liability insurance? my new landlord says i need a policy before we move in"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "i need a money order for $800 for my supplier, can i get one from you?"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "we're buying a second location and the seller wants the deposit held in escrow, can you guys do that??"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "is there someone there i can talk to about retirement planning? like a financial advisor? eventually i want to sell the business"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "can i buy bitcoin with the money in my business account through your app??"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "we want to give the staff prepaid visa gift cards as holiday bonuses this year, can we buy those from you?"
+style = "customer"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "owner has about $300k sitting in her Premier checking that she won't need for a year, asked if we can buy 6-month treasury bills for her through the account"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "biz just hit 12 employees and the owner wants to start a 401k for them, asking if MBFS can set up and run the plan"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "customer is taking her catering crew to a trade show in toronto next month and wants about $1,500 in canadian cash before they go, can we order that for her"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "laundromat owner goes through about $400 in quarters a week and wants to know if we can ship him rolled coin every monday"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "caller has about $5,000 in old EE savings bonds and wants to cash them in with us and put the money in his LLC checking, can we redeem them"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "importer pays a supplier in japan about 8 million yen every quarter by intl wire and wants to lock in today's exchange rate for the next 6 months, do we offer forward contracts"
+style = "narrative"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "can a customer get workers comp insurnace through us"
+style = "typo"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "do we have safe depost boxes customers can rent"
+style = "typo"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "can customers buy travelers checks from us before thier trip"
+style = "typo"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "is there a night depoist box where customers can drop the days cash after closing"
+style = "typo"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "customer owns a bar and wants an atm put in, do we install atms for merchnts"
+style = "typo"
+kind = "banking_not_offered"
+
+[[negative]]
+query = "mbfs corporate mailing address? cust wants to send a letter to hq"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "does MP sync w quickbooks online or xero"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "cust needs our routing # so clients can pay by ACH"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "receipt paper size for bridgeterminal pro + where to order more"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "do we take amex on CP txns or just visa/mc"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "cust asking if they can zelle from the biz acct"
+style = "shorthand"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "are you guys a public company? like can i buy merchantbridge stock somewhere"
+style = "customer"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "do you have a branch in houston i can walk into? i'd rather do this in person"
+style = "customer"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "how do i reset the PIN on my debit card? i totally forgot it"
+style = "customer"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "does the bridge debit card give any cash back or points or anything?"
+style = "customer"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "where am i supposed to deposit cash?? i run a food truck and half my customers pay cash"
+style = "customer"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "caller's daughter just finished college and wants to apply for a customer service job at MerchantBridge, where should she apply"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "a reporter from the local paper called the support line asking for MerchantBridge's media relations contact for a story, who do i send them to"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "merchant sells candles on shopify and wants to move their online payments to MBFS, is there a shopify app or plugin they can install"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "merchant ordered a BridgeTerminal Pro in the portal on monday and opens her coffee shop saturday, how long does shipping usually take"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "owner of an auto repair shop wants to add a 3% surcharge on card payments to cover processing fees, is that allowed with MBFS and how do they turn it on"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "corner grocery on Bridge Essentials says about half their customers pay with EBT, can the BridgeTerminal Pro take EBT/SNAP cards"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "customer flies to mexico city friday for a week and will use her Bridge Business Debit Mastercard there, does she need to set a travel notice on the card first"
+style = "narrative"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "whos the ceo of merchant bridge now"
+style = "typo"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "how long does the bridgeterminal mini batery last on a full charge"
+style = "typo"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "how do i chnage the tip % options on the bridgeterminal pro"
+style = "typo"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "how does a customer activate there new debit card"
+style = "typo"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "whats the minimum deposit to open a bridge plus acount"
+style = "typo"
+kind = "mbfs_not_covered"
+
+[[negative]]
+query = "is the mbfs app availble in spanish"
+style = "typo"
+kind = "mbfs_not_covered"

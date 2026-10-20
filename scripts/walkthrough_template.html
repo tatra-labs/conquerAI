@@ -1,0 +1,730 @@
+<title>MBFS Knowledge Service</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (max 1120px) on a blue-grey page; the decision trace is a numbered six-step
+   sequence, because it is one; charts sit on plain surfaces with a data table under each. */
+:root {
+  --page: #f3f5f8; --surface: #ffffff; --sunk: #ebeff4; --ink: #0f1726; --ink2: #46536a; --muted: #77839a;
+  --grid: #dfe5ed; --ring: rgba(15, 23, 38, 0.12); --accent: #2a78d6; --accent-ink: #1a5bad; --s2: #eb6834;
+  --good: #11804a; --bad: #c2382d; --warn: #9a640f; --hl: rgba(42, 120, 214, 0.10);
+  --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0c1016; --surface: #141a22; --sunk: #10151c; --ink: #e8edf3; --ink2: #a9b4c3; --muted: #7d8899;
+    --grid: #242d39; --ring: rgba(232, 237, 243, 0.12); --accent: #3987e5; --accent-ink: #84b6f2; --s2: #d95926;
+    --good: #43b97b; --bad: #f0675c; --warn: #d8a443; --hl: rgba(57, 135, 229, 0.16); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0c1016; --surface: #141a22; --sunk: #10151c; --ink: #e8edf3; --ink2: #a9b4c3; --muted: #7d8899;
+  --grid: #242d39; --ring: rgba(232, 237, 243, 0.12); --accent: #3987e5; --accent-ink: #84b6f2; --s2: #d95926;
+  --good: #43b97b; --bad: #f0675c; --warn: #d8a443; --hl: rgba(57, 135, 229, 0.16); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--ink); font: 15px/1.6 var(--body); margin: 0; }
+.wrap {
+  max-width: 1120px; margin: 0 auto; padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; letter-spacing: -0.01em; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 800; line-height: 1.05; }
+h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; line-height: 1.15; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+code, .mono { font-family: var(--mono); font-size: 0.88em; }
+a { color: var(--accent-ink); }
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.eyebrow { font: 600 12px/1.4 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink2); }
+
+header.top { padding-block: 40px 28px; border-bottom: 1px solid var(--grid); }
+header.top .stack { display: grid; gap: 14px; }
+.lede { font-size: 17px; color: var(--ink2); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; display: grid; gap: 2px; align-content: start; }
+.tile .l { font-size: 13px; color: var(--ink2); }
+.tile .v { font: 700 30px/1.15 var(--display); font-variant-numeric: tabular-nums; }
+.tile .d { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 6px; font-size: 14px; }
+nav.toc a { text-decoration: none; color: var(--ink2); border-bottom: 1px solid var(--grid); }
+nav.toc a:hover { color: var(--ink); border-color: var(--accent); }
+
+section.band { padding-block: 44px 8px; }
+section.band > .wrap > .head { display: grid; gap: 8px; margin-bottom: 18px; }
+section.band > .wrap > .head p { color: var(--ink2); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 13px/1.3 var(--body); border: 1px solid var(--ring); background: var(--surface); color: var(--ink);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer; max-width: 100%; text-align: left; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip .k { font-family: var(--mono); font-size: 11px; opacity: 0.8; margin-right: 6px; }
+
+.trace { display: grid; gap: 12px; margin-top: 16px; }
+.step { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.step > .sh { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.step > .sh .n { font: 700 13px/1 var(--mono); color: var(--accent-ink); }
+.step > .sh h3 { font-size: 16px; }
+.step > .sh .why { color: var(--muted); font-size: 13px; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; font-size: 14px; }
+.kv dt { color: var(--ink2); }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+.list li { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; border-bottom: 1px solid var(--grid); padding-bottom: 4px; min-width: 0; }
+.list li .t { min-width: 0; overflow-wrap: anywhere; }
+.list li .s { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink2); }
+.sub { color: var(--muted); font-size: 12px; }
+.badge { display: inline-block; font: 500 11px/1.5 var(--mono); padding: 0 6px; border-radius: 4px; border: 1px solid var(--ring); color: var(--ink2); margin-left: 4px; white-space: nowrap; }
+.badge.warn { color: var(--warn); border-color: currentColor; }
+.badge.good { color: var(--good); border-color: currentColor; }
+.badge.bad { color: var(--bad); border-color: currentColor; }
+.badge.acc { color: var(--accent-ink); border-color: currentColor; }
+
+.bars { display: grid; gap: 6px; }
+.bar { display: grid; grid-template-columns: minmax(0, 1fr) 160px 64px; gap: 10px; align-items: center; font-size: 13px; padding: 4px 6px; border-radius: 6px; }
+.bar.win { background: var(--hl); }
+.bar .lab { min-width: 0; overflow-wrap: anywhere; }
+.bar .track { height: 10px; position: relative; background: var(--sunk); border-radius: 5px; }
+.bar .fill { position: absolute; top: 0; bottom: 0; border-radius: 5px; background: var(--accent); }
+.bar .fill.out { background: var(--muted); }
+.bar .zero { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--ink2); }
+.bar .val { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .bar { grid-template-columns: minmax(0, 1fr) 90px 56px; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--ink2); font-weight: 600; }
+td.num, th.num { text-align: right; }
+.scroll { overflow-x: auto; min-width: 0; }
+tr.pick { background: var(--hl); }
+tr.pick td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+.rules { counter-reset: r; display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+.rules li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; padding: 4px 6px; border-radius: 6px; color: var(--muted); }
+.rules li::before { counter-increment: r; content: counter(r); font-family: var(--mono); }
+.rules li .rn { font-family: var(--mono); }
+.rules li.hit { background: var(--hl); color: var(--ink); }
+.rules li.hit .rn { color: var(--accent-ink); font-weight: 500; }
+
+.verdict { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.pill { font: 700 12px/1 var(--mono); letter-spacing: 0.04em; padding: 6px 10px; border-radius: 999px; color: #fff; text-transform: uppercase; }
+.pill.answer { background: var(--good); } .pill.partial { background: var(--warn); } .pill.clarify { background: var(--accent); } .pill.refuse { background: var(--bad); }
+.action { color: var(--ink2); font-size: 14px; }
+.answer-text { display: grid; gap: 6px; font-size: 15px; }
+.answer-text .seg.note { color: var(--ink2); font-size: 14px; }
+.answer-text .seg.part { font-weight: 600; margin-top: 4px; }
+.answer-text .seg.internal::before { content: "Internal · "; color: var(--warn); font: 600 12px var(--mono); }
+.answer-text sup { font: 500 11px var(--mono); color: var(--accent-ink); margin-left: 2px; }
+.receipts { display: grid; gap: 8px; }
+.receipt { border: 1px dashed var(--ring); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; font-size: 13px; min-width: 0; }
+.receipt .rh { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.receipt .rh .no { font: 600 12px var(--mono); color: var(--accent-ink); }
+.receipt .where { font-family: var(--mono); font-size: 12px; color: var(--ink2); overflow-wrap: anywhere; }
+.receipt q { font-style: normal; quotes: "\201C" "\201D"; overflow-wrap: anywhere; }
+
+.timeline { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: t; }
+.timeline li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--grid); }
+.timeline li::before { counter-increment: t; content: counter(t, decimal-leading-zero); font: 600 13px/1.6 var(--mono); color: var(--accent-ink); }
+.timeline .what { display: grid; gap: 4px; }
+.timeline .what b { font-family: var(--display); font-size: 16px; }
+.timeline .what span { color: var(--ink2); font-size: 14px; max-width: 75ch; }
+
+.chart { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.chart .ch { display: grid; gap: 4px; }
+.chart .ch p { color: var(--ink2); font-size: 14px; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart svg text { fill: var(--muted); font: 11px var(--body); }
+.chart svg text.lab { fill: var(--ink2); font-size: 12px; }
+.chart svg text.val { fill: var(--ink); font: 500 11px var(--mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink2); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 14px; }
+details.data summary { cursor: pointer; color: var(--ink2); font-size: 13px; }
+details.data[open] summary { margin-bottom: 6px; }
+
+.fails { display: grid; gap: 10px; }
+.fail { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; }
+.fail .fh { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.fail .fh .id { font: 600 13px var(--mono); }
+.fail .q { font-weight: 600; }
+.fail .dx { color: var(--ink2); font-size: 14px; }
+
+.qa { display: grid; gap: 0; }
+.qa details { border-bottom: 1px solid var(--grid); padding-block: 10px; }
+.qa summary { cursor: pointer; font-weight: 600; list-style-position: outside; }
+.qa details p { color: var(--ink2); margin-top: 8px; }
+
+footer { padding-block: 40px 56px; color: var(--muted); font-size: 13px; }
+footer pre { background: var(--sunk); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font: 12px/1.6 var(--mono); color: var(--ink2); }
+
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--ring);
+  border-radius: 8px; padding: 6px 9px; font-size: 12px; max-width: 320px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.res-ok { color: var(--good); font-weight: 600; } .res-no { color: var(--bad); font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) { .bar .fill { transition: width 0.25s ease; } }
+</style>
+
+<div id="tip" hidden></div>
+
+<header class="top">
+  <div class="wrap stack">
+    <p class="eyebrow">MerchantBridge Financial Services · contact-center knowledge assistant</p>
+    <h1>MBFS Knowledge Service</h1>
+    <p class="lede">An agent asks a question with a customer on the line. The service answers only from the knowledge base, cites the exact characters it relies on, and says when the knowledge base cannot answer. Every decision comes with the rule that made it.</p>
+    <div class="tiles" id="tiles"></div>
+    <nav class="toc" aria-label="Sections">
+      <a href="#trace">One question, end to end</a><a href="#how">How it decides</a><a href="#changes">What changed, and why</a>
+      <a href="#results">Results</a><a href="#failures">Where it fails</a><a href="#qa">Questions to expect</a>
+    </nav>
+  </div>
+</header>
+
+<section class="band" id="trace">
+  <div class="wrap">
+    <div class="head">
+      <h2>One question, end to end</h2>
+      <p>Pick a question. These are real traces from the evaluation run, stage by stage: what the question was read as, what retrieval nominated, how the cross-encoder scored it, which source the structure rules chose and why, which gate rule decided, and the cited answer.</p>
+    </div>
+    <div class="chips" id="picker" role="group" aria-label="Example questions"></div>
+    <div class="trace" id="tracebox"></div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="head">
+      <h2>How it decides</h2>
+      <p>Retrieval finds candidates and a small cross-encoder ranks them, but a relevance score cannot tell "incoming" from "outgoing", a 2027 notice from today's fee, or $30,000 from a tier range. So the ranker chooses what is relevant, structure chooses the value, a stronger cross-encoder checks that the unit about to be quoted answers the question, and an ordered list of named rules decides whether to answer at all.</p>
+    </div>
+    <div class="grid2">
+      <div class="chart">
+        <div class="ch"><h3>The pipeline</h3><p>Validity is applied before retrieval, so superseded content can never be a candidate.</p></div>
+<pre class="mermaid">
+flowchart TD
+  Q[Agent question] --> A["Read: mask card numbers, strip filler,<br/>KB glossary, account intent, dates, plans, amounts, sub-questions"]
+  V["Validity on the date:<br/>current / upcoming / superseded"] --> R
+  A --> R["Retrieve: BM25 body + headings,<br/>dense bge-small; union of 12 + 12"]
+  R --> X["Ranker MiniLM-L6:<br/>orders candidates"]
+  X --> E["Evidence: trust tiers, fit check,<br/>rows by structure, sentence runs, gaps, notes"]
+  E --> W["Verifier bge-reranker-v2-m3:<br/>does the quoted unit answer it?"]
+  W --> G{"Gate: first matching rule"}
+  G -->|answer / partial| T["Extractive answer:<br/>every sentence cited"]
+  G -->|clarify / refuse| N["Question or route,<br/>never an amount"]
+  T -.optional.-> C["Claude: cited per sentence,<br/>values checked, never raises the decision"]
+</pre>
+      </div>
+      <div class="chart">
+        <div class="ch"><h3>The gate, in order</h3><p>The first rule that matches decides. Its name is in every answer as <code>confidence.rule</code>.</p></div>
+        <ol class="rules" id="ruleref"></ol>
+        <p class="sub">Levels are actions for the agent: <b>high</b> read it out, <b>medium</b> check the source first, <b>low</b> share only what is cited. The number beside them is a raw cross-encoder logit, never shown as a percentage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="changes">
+  <div class="wrap">
+    <div class="head">
+      <h2>What changed, and why</h2>
+      <p>The design moved whenever a measurement said it was wrong. In order:</p>
+    </div>
+    <ol class="timeline">
+      <li><div class="what"><b>A corpus built to fail naively</b><span>29 documents in markdown, HTML and CSV, with the ways real knowledge bases go wrong planted on purpose: a superseded fee schedule, an unapproved draft, an approved notice of 2027 fees, a stale FAQ, a help article that drifted from policy, a hidden A/B variant, near-miss products and internal procedures. Each trap has a test that proves it is really there.</span></div></li>
+      <li><div class="what"><b>RRF out of the main path</b><span>With a cross-encoder downstream, fusion only decides which candidates get scored, and reciprocal-rank fusion demoted exact BM25 hits on fee names that the dense side missed. Both retrievers now nominate 12 and the cross-encoder scores the union. RRF stays as the no-reranker ablation.</span></div></li>
+      <li><div class="what"><b>Trust tiers, after the notice outranked the fee row</b><span>The 2027 notice scored 9.46 against the current fee row's 8.26 for "What's the monthly fee for Bridge Essentials?", and the stale FAQ outranks the wire policy. "Authority, then recency" would have served next year's price as today's. Now the window is anchored on the best current, not-outdated source, and upcoming or outdated content becomes a dated or conflict note.</span></div></li>
+      <li><div class="what"><b>A fit check, after the PCI row answered "monthly fee"</b><span>Each candidate within 3 logits of the anchor pays 2 logits per question term it does not cover, judged on a row's label rather than its unit, plus 2 more if it states no value of the kind asked for. That fixed the monthly-fee and wire-cost questions without touching the scores.</span></div></li>
+      <li><div class="what"><b>Rows by structure, because the reranker cannot separate siblings</b><span>"Incoming" and "outgoing" wire rows score within a fraction of a logit in every serialization tried. Facet words derived from the rows themselves pick the row, plan names pick the column, and interval lookup picks a savings tier.</span></div></li>
+      <li><div class="what"><b>No spell-corrector</b><span>Correcting against the corpus turned "cashier's" into "casher" and erased the signal that refuses the cashier's-check question. Only words the corpus has never seen get one-edit tolerance, and only inside the cited evidence.</span></div></li>
+      <li><div class="what"><b>Calibration on synthetic questions, after the first attempt refused nearly everything</b><span>Using gold-deleted dev questions as negatives produced floors that refused most answerable questions: with the right passage gone, an on-topic distractor still scores high. The floors now come from 205 questions templated from the corpus against 28 off-topic ones, and the gold-deleted measurement stays as the strip plot below.</span></div></li>
+      <li><div class="what"><b>Code review, round one: five lenses, every finding reproduced by a skeptic</b><span>It found that concurrent API requests shared per-request state (2 of 64 threaded answers quoted another question), that the scorer passed a wrong FDIC answer because a tier boundary of $250,000 matched the fact, that a year in the question hid most of the knowledge base, that card numbers with a CVV attached leaked, and that the LLM path let the model upgrade the gate's decision. All fixed, with tests.</span></div></li>
+      <li><div class="what"><b>Code review, round two: the fixes, reviewed the same way</b><span>A notice's bullets were scored with the previous bullet prepended, so the paper-statement change answered an Instant Payout question; list items now read with their list's lead-in instead. A past-dated fee question could be answered by a policy that took effect later, so a fee or rate for a past date now comes only from sources in effect then. Card numbers split by a Unicode minus or zero-width characters were assembled by normalisation after masking, so masking now runs on normalised text and again after filler is stripped. The API's error body echoed rejected input. Claude's bullets were not separate claims.</span></div></li>
+      <li><div class="what"><b>Held-out v1, blind: 3 of 12</b><span>Twelve questions written from the brief's requirements by an agent that never saw the corpus design, labeled blind against the corpus text by another, frozen by hash and run once. Dev said 22 of 27; the blind set said 3 of 12. The gap was the finding. Four answerable questions were refused although their right passage ranked first, because the floor had been fitted on questions templated from the documents' own headings. Those score far higher than anything an agent types.</span></div></li>
+      <li><div class="what"><b>Fixing causes, not questions</b><span>The floors were refitted on a realistic calibration set: about 200 questions in shorthand, customer words, narratives and typos, written from the corpus alone and verified, with nothing overlapping a test question. The fit uses the score the gate actually tests. Also, an outdated source no longer supplies a value, a statement after a question is read as its context, and the account rules understand "this cust's". Every change is general; none names a test question.</span></div></li>
+      <li><div class="what"><b>A verifier, because no floor could fix the ranker</b><span>Even on realistic questions, the best floor for the small ranker refused about two thirds of answerable ones: it scores real phrasing and not-covered questions in KB vocabulary alike (AUC 0.87). bge-reranker-v2-m3 separates them at 0.95 on the same calibration questions, but costs about ten times as much per pair. It now scores only the unit about to be quoted, and the gate tests its score.</span></div></li>
+      <li><div class="what"><b>Held-out v2, blind, once</b><span>Twenty fresh questions from two new writers and two blind labelers, under the same protocol, frozen by hash and run a single time after the fixes. That is the number to trust. Held-out v1, rerun after the fixes, is shown too, marked as no longer blind.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" id="results">
+  <div class="wrap">
+    <div class="head">
+      <h2>Results</h2>
+      <p id="results-intro"></p>
+    </div>
+    <div class="grid2" id="charts"></div>
+    <div class="chart" style="margin-top:14px">
+      <div class="ch"><h3>Every question</h3><p>Decision, the rule that made it, and whether it passed. Select a row to see the answer and its citations.</p></div>
+      <div class="filters" id="qfilter" role="group" aria-label="Filter questions"></div>
+      <div class="scroll"><table id="qtable"><thead><tr><th>id</th><th>question</th><th>decision</th><th>rule</th><th>result</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="failures">
+  <div class="wrap">
+    <div class="head">
+      <h2>Where it fails</h2>
+      <p>Every failing question, with what went wrong. Failure predictions were written before the first full run.</p>
+    </div>
+    <div class="fails" id="faillist"></div>
+  </div>
+</section>
+
+<section class="band" id="qa">
+  <div class="wrap">
+    <div class="head"><h2>Questions to expect</h2><p>The questions a reviewer is likely to ask, with short answers grounded in what was measured.</p></div>
+    <div class="qa" id="qalist"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Built from <code>eval/results/results.json</code> by <code>scripts/build_walkthrough.py</code>. Reproduce every number:</p>
+    <pre>python -m mbfs_rag download-models
+python -m mbfs_rag eval --ablations
+python scripts/build_walkthrough.py</pre>
+    <p id="frozen"></p>
+  </div>
+</footer>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const NS = "http://www.w3.org/2000/svg";
+  const byId = Object.fromEntries(D.items.map(i => [i.id, i]));
+  const P = D.passages || {};
+  const T = D.thresholds || {};
+
+  // ---------------------------------------------------------------- small DOM helpers (text only, never innerHTML)
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v === undefined || v === null || v === false) continue;
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v);
+    }
+    for (const k of kids.flat()) if (k !== null && k !== undefined && k !== false) n.append(k instanceof Node ? k : document.createTextNode(String(k)));
+    return n;
+  }
+  function s(tag, attrs = {}, text) {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      // Theme tokens go in as style, so the chart follows a theme change without a redraw.
+      if ((k === "fill" || k === "stroke") && String(v).startsWith("var(")) n.style.setProperty(k, v); else n.setAttribute(k, v);
+    }
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  const pct = x => Math.round(100 * x) + "%";
+  const rateText = r => r && r.n ? `${r.k}/${r.n}` : "not run";
+  const ci = r => r && r.n ? `${pct(r.p)} · 95% CI ${pct(r.lo)}–${pct(r.hi)}` : "";
+  const fmt = (x, d = 2) => (x === null || x === undefined) ? "–" : (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(d);
+  const title = pid => { const p = P[pid]; return p ? p.title + (p.section ? " › " + p.section : "") : pid; };
+
+  // tooltip layer
+  const tip = document.getElementById("tip");
+  function bindTip(node, text) {
+    node.addEventListener("pointerenter", () => { tip.textContent = text; tip.hidden = false; });
+    node.addEventListener("pointermove", e => {
+      const w = tip.offsetWidth, h = tip.offsetHeight;
+      let x = e.clientX + 14, y = e.clientY + 14;
+      if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+      if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+      tip.style.left = x + "px"; tip.style.top = y + "px";
+    });
+    node.addEventListener("pointerleave", () => { tip.hidden = true; });
+  }
+
+  // ---------------------------------------------------------------- header tiles
+  const R = D.rates, S = D.summary || {};
+  const has = k => R[k] && R[k].passed && R[k].passed.n;
+  const blind = has("heldout_v2") ? "heldout_v2" : "heldout_v1";
+  const tiles = [
+    ["Held-out v2 passed", rateText(has("heldout_v2") && R.heldout_v2.passed), has("heldout_v2") ? ci(R.heldout_v2.passed) + " · blind, after the fixes" : "not run yet"],
+    ["Held-out v1 passed", rateText(has("heldout_v1_blind") && R.heldout_v1_blind.passed), has("heldout_v1_blind") ? ci(R.heldout_v1_blind.passed) + " · blind, before the fixes" : ""],
+    ["Dev passed", rateText(has("dev") && R.dev.passed), has("dev") ? ci(R.dev.passed) + " · used in development" : ""],
+    ["Unsafe answers, held-out v2", S[blind] ? String(S[blind].unsafe) : "–", "a wrong or stale value, or an answer where the label says refuse"],
+  ];
+  const tilesBox = document.getElementById("tiles");
+  for (const [l, v, d] of tiles) tilesBox.append(el("div", { class: "tile" }, el("span", { class: "l", text: l }), el("span", { class: "v", text: v }), el("span", { class: "d", text: d })));
+
+  // ---------------------------------------------------------------- gate rule reference
+  const RULES = [
+    ["empty_input", "nothing left after cleaning", "refuse"],
+    ["account_lookup_with_policy", "account data asked, strong general policy found", "partial"],
+    ["account_lookup", "balance, status, \"why was I charged\"", "refuse"],
+    ["no_topical_term", "no title, heading, row-label or glossary word, no KB code", "clarify"],
+    ["outdated_only", "a fee, time or limit asked, and only an outdated source has one", "refuse"],
+    ["no_relevant_evidence", "best evidence below the floor for its unit type", "refuse"],
+    ["missing_key_term", "a product modifier is uncovered and evidence is only moderate", "refuse"],
+    ["too_many_matches", "more matching rows than an agent can scan (>6)", "clarify"],
+    ["uncovered_modifier", "strong evidence, but a modifier is uncovered", "partial"],
+    ["answer", "otherwise", "answer"],
+  ];
+  function ruleList(hit) {
+    const ol = el("ol", { class: "rules" });
+    for (const [name, when, dec] of RULES) {
+      ol.append(el("li", { class: hit && hit.split(" + ").includes(name) ? "hit" : "" },
+        el("span", {}, el("span", { class: "rn", text: name }), " ", el("span", { class: "sub", text: when })),
+        el("span", { class: "badge", text: dec })));
+    }
+    return ol;
+  }
+  document.getElementById("ruleref").replaceWith(ruleList(null));
+
+  // ---------------------------------------------------------------- trace explorer
+  const picker = document.getElementById("picker"), box = document.getElementById("tracebox");
+  const showcase = D.showcase.filter(id => byId[id] && byId[id].trace);
+  function stepCard(n, name, why, ...body) {
+    return el("div", { class: "step" }, el("div", { class: "sh" }, el("span", { class: "n", text: String(n).padStart(2, "0") }), el("h3", { text: name }), why ? el("span", { class: "why", text: why }) : null), ...body);
+  }
+  function kv(pairs) {
+    const dl = el("dl", { class: "kv" });
+    for (const [k, v] of pairs) if (v !== null && v !== undefined && v !== "") dl.append(el("dt", { text: k }), el("dd", {}, v));
+    return dl;
+  }
+  function scoreList(rows, unit) {
+    const ul = el("ul", { class: "list" });
+    for (const [pid, sc] of rows) ul.append(el("li", {}, el("span", { class: "t" }, title(pid), " ", el("span", { class: "sub mono", text: pid })), el("span", { class: "s", text: unit === "cos" ? sc.toFixed(3) : sc.toFixed(2) })));
+    return ul;
+  }
+  function stateBadges(r) {
+    const out = [];
+    if (r.state === "upcoming") out.push(el("span", { class: "badge warn", text: "upcoming" }));
+    if (r.outdated) out.push(el("span", { class: "badge warn", text: "possibly outdated" }));
+    out.push(el("span", { class: "badge", text: ({ 3: "authoritative", 2: "help / glossary", 1: "FAQ" })[r.authority] || "authority " + r.authority }));
+    return out;
+  }
+  function rerankBars(f) {
+    const rows = f.reranked;
+    const lo = Math.min(0, ...rows.map(r => r.logit)), hi = Math.max(1, ...rows.map(r => r.logit));
+    const span = hi - lo || 1, z = (0 - lo) / span;
+    const wrap = el("div", { class: "bars" });
+    const win = new Set(f.window || []);
+    for (const r of rows) {
+      const left = r.logit >= 0 ? z : (r.logit - lo) / span, width = Math.abs(r.logit) / span;
+      const fill = el("span", { class: "fill" + (win.has(r.passage) ? "" : " out") });
+      fill.style.left = (100 * left) + "%"; fill.style.width = Math.max(0.5, 100 * width) + "%";
+      const zero = el("span", { class: "zero" }); zero.style.left = (100 * z) + "%";
+      const row = el("div", { class: "bar" + (r.passage === f.primary ? " win" : "") },
+        el("span", { class: "lab" }, title(r.passage), ...stateBadges(r), r.passage === f.primary ? el("span", { class: "badge acc", text: "chosen" }) : null),
+        el("span", { class: "track" }, fill, zero), el("span", { class: "val", text: fmt(r.logit) }));
+      bindTip(row, `${r.passage}: logit ${r.logit.toFixed(2)}${win.has(r.passage) ? " · in the trusted window" : " · outside the window"}\n${(P[r.passage] || {}).snippet || ""}`);
+      wrap.append(row);
+    }
+    return wrap;
+  }
+  function fitTable(f) {
+    const pen = T.miss_penalty ?? 2;
+    const logit = Object.fromEntries((f.reranked || []).map(r => [r.passage, r.logit]));
+    const tb = el("tbody");
+    for (const pid of f.window || []) {
+      const m = (f.misses || {})[pid] ?? 0, l = logit[pid];
+      tb.append(el("tr", { class: pid === f.primary ? "pick" : "" }, el("td", {}, title(pid)), el("td", { class: "num mono", text: l === undefined ? "–" : l.toFixed(2) }),
+        el("td", { class: "num mono", text: String(m) }), el("td", { class: "num mono", text: l === undefined ? "–" : (l - pen * m).toFixed(2) })));
+    }
+    return el("div", { class: "scroll" }, el("table", {}, el("thead", {}, el("tr", {}, el("th", { text: "candidate in the trusted window" }), el("th", { class: "num", text: "logit" }), el("th", { class: "num", text: "misses" }), el("th", { class: "num", text: `logit − ${pen} × misses` }))), tb));
+  }
+  function signalsList(sg) {
+    if (!sg) return null;
+    const floor = sg.floor, high = sg.high;
+    return kv([
+      ["gate score", `${fmt(sg.score)} (floor ${fmt(floor)}, high ${fmt(high)})`],
+      ["above floor", sg.score !== null && sg.score >= floor ? "yes" : "no"],
+      ["strong", sg.score !== null && sg.score >= high ? "yes" : "no"],
+      ["uncovered modifiers", (sg.gaps || []).join(", ") || "none"],
+      ["rows matched", String(sg.rows_matched)],
+      ["current, authority", `${sg.current ? "current" : "not current"}, ${sg.authority}`],
+      ["conflicting source", sg.conflict ? "yes" : "no"],
+      ["account data asked", sg.account_intent || "no"],
+      ["names a KB topic", sg.topical ? "yes" : "no"],
+    ]);
+  }
+  function answerBlock(item) {
+    const cites = Object.fromEntries(item.citations.map(c => [c.n, c]));
+    const txt = el("div", { class: "answer-text" });
+    for (const sg of item.segments) {
+      const p = el("p", { class: "seg " + sg.kind + (sg.internal ? " internal" : "") }, sg.kind === "note" ? "Note: " : "", sg.kind === "part" ? `“${sg.text}”` : sg.text);
+      for (const n of sg.citations) p.append(el("sup", { text: `[${n}]` }));
+      txt.append(p);
+    }
+    const rc = el("div", { class: "receipts" });
+    for (const c of item.citations) {
+      rc.append(el("div", { class: "receipt" },
+        el("div", { class: "rh" }, el("span", { class: "no", text: `[${c.n}]` }), el("span", {}, c.title + (c.section ? " › " + c.section : "")),
+          el("span", { class: "badge" + (c.validity === "current" ? " good" : " warn"), text: c.validity }), c.audience === "internal" ? el("span", { class: "badge warn", text: "internal" }) : null,
+          c.cell ? el("span", { class: "badge acc", text: `${c.cell.code || c.cell.row} · ${c.cell.column}` }) : null),
+        el("q", { text: c.quote }),
+        el("span", { class: "where", text: `${c.source_path} L${c.lines[0]}${c.lines[1] !== c.lines[0] ? "–" + c.lines[1] : ""} · chars ${c.char_range[0]}–${c.char_range[1]} · ${c.span_id}` })));
+    }
+    return [txt, item.citations.length ? rc : null];
+  }
+  function renderTrace(id) {
+    const it = byId[id], tr = it.trace;
+    for (const b of picker.children) b.setAttribute("aria-pressed", String(b.dataset.id === id));
+    box.replaceChildren();
+    const a = tr.analysis || {};
+    box.append(stepCard(1, "Read the question", "before any retrieval",
+      kv([["question", it.query], ["after cleaning", a.cleaned], ["sub-questions", (a.facets || []).join(" | ")], ["plans named", (a.plans || []).join(", ") || "none"],
+        ["amounts", (a.amounts || []).map(x => "$" + x.toLocaleString()).join(", ") || "none"], ["glossary", (a.expansions || []).map(e => `${e[0]} → ${e[1]}`).join("; ") || "none"],
+        ["account data asked", a.account_intent || "no"], ["date", tr.as_of + (a.as_of_override ? " (from the question)" : " (snapshot)")],
+        ["card number masked", a.card_number_masked ? "yes" : "no"]])));
+    tr.facets.forEach((f, i) => {
+      const tag = tr.facets.length > 1 ? ` · part ${i + 1} of ${tr.facets.length}` : "";
+      box.append(stepCard(2, "Retrieve" + tag, `${f.pool_size} candidates; ${f.hidden_by_date} units not valid on ${tr.as_of}`,
+        el("div", { class: "two" }, el("div", {}, el("p", { class: "sub", text: "BM25 (body + heading field), top 5" }), scoreList(f.bm25_top)), el("div", {}, el("p", { class: "sub", text: "Dense bge-small, cosine, top 5" }), scoreList(f.dense_top, "cos")))));
+      box.append(stepCard(3, "Rerank" + tag, "cross-encoder logits; grey bars are outside the trusted window", rerankBars(f)));
+      const table = f.table ? kv([["rows in pool", (f.table.rows_in_pool || []).join(", ")], ["facet words used", (f.table.facet_words || []).join(", ") || "none"], ["tier lookup", (f.table.range_lookup || []).join(", ")]]) : null;
+      const cov = f.coverage || {};
+      box.append(stepCard(4, "Choose the evidence" + tag, "anchored on the best current, not-outdated source; fit decides within 3 logits",
+        f.window && f.window.length ? fitTable(f) : el("p", { class: "sub", text: "No candidate cleared its floor: nothing to choose from." }),
+        table, kv([["uncovered modifier", (cov.gaps || []).join(", ") || "none"], ["other uncovered words", (cov.uncovered || []).join(", ") || "none"]])));
+      const sg = f.signals || {};
+      box.append(stepCard(5, "Verify" + tag, "a stronger cross-encoder scores only the unit about to be quoted",
+        f.primary ? kv([["unit", title(f.primary)], ["verifier score", f.ranker_score === null || f.ranker_score === undefined ? "not run" : fmt(sg.score)],
+          ["ranker score", fmt(f.ranker_score ?? sg.score)], ["answer floor", fmt(sg.floor)], ["clears it", sg.score !== null && sg.score >= sg.floor ? "yes" : "no"]])
+          : el("p", { class: "sub", text: "No unit to verify." })));
+      box.append(stepCard(6, "Gate" + tag, `rule: ${f.rule}`, el("div", { class: "two" }, signalsList(f.signals), ruleList(f.rule))));
+    });
+    box.append(stepCard(7, "Answer", `${it.ms} ms`,
+      el("div", { class: "verdict" }, el("span", { class: "pill " + it.decision, text: it.decision }), el("span", { class: "badge", text: "level: " + it.level }), el("span", { class: "mono sub", text: it.rule })),
+      ...answerBlock(it),
+      el("p", { class: "sub" }, "Graded against the blind or hand-written gold: ", el("b", { class: it.passed ? "res-ok" : "res-no", text: it.passed ? "pass" : "fail · " + it.stage }), it.notes ? " · " + it.notes : "")));
+  }
+  for (const id of showcase) {
+    const it = byId[id];
+    const b = el("button", { class: "chip", type: "button", "aria-pressed": "false", "data-id": id }, el("span", { class: "k", text: id }), it.query);
+    b.addEventListener("click", () => renderTrace(id));
+    picker.append(b);
+  }
+  if (showcase.length) renderTrace(showcase[0]);
+
+  // ---------------------------------------------------------------- charts
+  const charts = document.getElementById("charts");
+  function chartCard(h, p, svgNode, legend, dataTable) {
+    const card = el("div", { class: "chart" }, el("div", { class: "ch" }, el("h3", { text: h }), el("p", { text: p })));
+    if (legend) card.append(legend);
+    card.append(svgNode);
+    if (dataTable) card.append(el("details", { class: "data" }, el("summary", { text: "Show the data" }), el("div", { class: "scroll" }, dataTable)));
+    charts.append(card);
+  }
+  function legendOf(pairs) { return el("div", { class: "legend" }, ...pairs.map(([c, t]) => el("span", {}, (() => { const i = el("i"); i.style.background = c; return i; })(), t))); }
+  function tableOf(head, rows) {
+    return el("table", {}, el("thead", {}, el("tr", {}, ...head.map(h => el("th", { text: h })))), el("tbody", {}, ...rows.map(r => el("tr", {}, ...r.map(c => el("td", { text: String(c) }))))));
+  }
+  const C = k => `var(${k})`;
+
+  // 1. rates with intervals
+  (() => {
+    const measures = [["passed", "passed"], ["decision", "acceptable decision"], ["support", "facts stated and cited"]];
+    const NAMES = D.split_names || {};
+    const splits = [["dev", C("--muted"), NAMES.dev || "dev", false], ["heldout_v1_blind", C("--s2"), NAMES.heldout_v1_blind, false],
+      ["heldout_v1", C("--s2"), NAMES.heldout_v1, true], ["heldout_v2", C("--accent"), NAMES.heldout_v2, false]].filter(([k]) => has(k));
+    const W = 560, rowH = 22, top = 8, left = 170, right = 24, H = top + measures.length * (splits.length * rowH + 12) + 26;
+    const g = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Rates with 95% Wilson intervals" });
+    const x = v => left + v * (W - left - right);
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) { g.append(s("line", { x1: x(t), x2: x(t), y1: top, y2: H - 22, stroke: C("--grid") })); g.append(s("text", { x: x(t), y: H - 6, "text-anchor": "middle" }, pct(t))); }
+    let y = top + 4;
+    const rows = [];
+    for (const [mk, ml] of measures) {
+      g.append(s("text", { x: 0, y: y + 12, class: "lab" }, ml));
+      for (const [sk, color, sl, hollow] of splits) {
+        const r = R[sk][mk]; if (!r || !r.n) { y += rowH; continue; }
+        const cy = y + 10;
+        g.append(s("line", { x1: x(r.lo), x2: x(r.hi), y1: cy, y2: cy, stroke: color, "stroke-width": 2, "stroke-linecap": "round", "stroke-dasharray": hollow ? "3 3" : "none" }));
+        const dot = hollow
+          ? s("circle", { cx: x(r.p), cy, r: 4.5, fill: C("--surface"), stroke: color, "stroke-width": 2 })
+          : s("circle", { cx: x(r.p), cy, r: 5, fill: color, stroke: C("--surface"), "stroke-width": 2 });
+        g.append(dot);
+        const lbl = `${sl}: ${r.k}/${r.n} (${pct(r.p)}, 95% CI ${pct(r.lo)}–${pct(r.hi)})`;
+        g.append(s("text", { x: Math.min(x(r.hi) + 8, W - 4), y: cy + 4, class: "val", "text-anchor": x(r.hi) + 8 > W - 60 ? "end" : "start" }, `${r.k}/${r.n}`));
+        const hit = s("rect", { x: left, y: cy - 10, width: W - left - right, height: 20, fill: "transparent" }); bindTip(hit, lbl); g.append(hit);
+        rows.push([ml, sl, `${r.k}/${r.n}`, pct(r.p), `${pct(r.lo)}–${pct(r.hi)}`]);
+        y += rowH;
+      }
+      y += 12;
+    }
+    chartCard("Rates, with 95% intervals", "Wilson intervals: at n = 12 one question moves a rate by 8 points, so the bars matter more than the dots. The dashed series is held-out v1 rerun after the fixes it prompted: no longer blind, shown only to make the change visible.", g,
+      legendOf(splits.map(([, c, l]) => [c, l])), tableOf(["measure", "set", "k/n", "rate", "95% CI"], rows));
+  })();
+
+  // 2. ablations
+  (() => {
+    const A = D.ablations; if (!A || !A.matrix) return;
+    const NAMES = { full: "full system", validity: "no validity windows", trust: "no trust tiers", structure: "no structure (top score wins)", gaps: "no gap check", glossary: "no glossary", filler: "no filler stripping", gate: "no gate (always answer)", verifier: "no verifier (gate on the ranker's score)", headers: "no heading context" };
+    const keys = Object.keys(A.matrix);
+    const n = Object.keys(A.matrix.full).length;
+    const W = 560, rowH = 24, left = 200, right = 60, H = keys.length * rowH + 30;
+    const g = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Questions passed per ablation" });
+    const x = v => left + (v / n) * (W - left - right);
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) { g.append(s("line", { x1: x(t * n), x2: x(t * n), y1: 4, y2: H - 22, stroke: C("--grid") })); g.append(s("text", { x: x(t * n), y: H - 6, "text-anchor": "middle" }, String(Math.round(t * n)))); }
+    const rows = [];
+    keys.forEach((k, i) => {
+      const passed = Object.values(A.matrix[k]).filter(Boolean).length;
+      const m = (A.mcnemar || {})[k];
+      const y = 6 + i * rowH;
+      g.append(s("text", { x: 0, y: y + 13, class: "lab" }, NAMES[k] || k));
+      g.append(s("rect", { x: left, y: y + 3, width: Math.max(1, x(passed) - left), height: 14, rx: 4, fill: k === "full" ? C("--accent") : C("--muted") }));
+      g.append(s("text", { x: x(passed) + 6, y: y + 14, class: "val" }, `${passed}/${n}`));
+      const hit = s("rect", { x: 0, y, width: W, height: rowH, fill: "transparent" });
+      bindTip(hit, k === "full" ? `full system: ${passed}/${n}` : `${NAMES[k] || k}: ${passed}/${n}; worse on ${m ? m.full_only : "?"}, better on ${m ? m.ablation_only : "?"} (exact McNemar p = ${m ? m.p_exact : "?"})${m && m.flipped.length ? "; flipped: " + m.flipped.join(", ") : ""}`);
+      g.append(hit);
+      rows.push([NAMES[k] || k, `${passed}/${n}`, m ? m.full_only : "", m ? m.ablation_only : "", m ? m.p_exact : "", m ? m.flipped.join(" ") : ""]);
+    });
+    chartCard("What each defence buys", "Each row removes one mechanism and reruns every question. The tooltip names the questions that flipped and the exact McNemar test; at this n most differences are directional, not significant.", g, null,
+      tableOf(["variant", "passed", "worse on", "better on", "McNemar p", "flipped"], rows));
+  })();
+
+  // 3. risk-coverage
+  (() => {
+    const rc = D.risk_coverage; if (!rc || !rc.length) return;
+    const W = 560, H = 260, l = 44, r = 16, t = 10, b = 34;
+    const g = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Risk against coverage" });
+    const x = v => l + v * (W - l - r), y = v => t + (1 - v) * (H - t - b);
+    for (const v of [0, 0.25, 0.5, 0.75, 1]) {
+      g.append(s("line", { x1: x(0), x2: x(1), y1: y(v), y2: y(v), stroke: C("--grid") })); g.append(s("text", { x: l - 6, y: y(v) + 4, "text-anchor": "end" }, pct(v)));
+      g.append(s("text", { x: x(v), y: H - 14, "text-anchor": "middle" }, pct(v)));
+    }
+    g.append(s("text", { x: x(0.5), y: H - 1, "text-anchor": "middle" }, "coverage: share of questions answered, highest score first"));
+    g.append(s("text", { x: 10, y: y(0.5), transform: `rotate(-90 10 ${y(0.5)})`, "text-anchor": "middle" }, "risk: wrong among answered"));
+    const d = rc.map((p, i) => `${i ? "L" : "M"}${x(p.coverage).toFixed(1)},${y(p.risk).toFixed(1)}`).join(" ");
+    g.append(s("path", { d, fill: "none", stroke: C("--accent"), "stroke-width": 2, "stroke-linejoin": "round" }));
+    for (const p of rc) { const c = s("circle", { cx: x(p.coverage), cy: y(p.risk), r: 6, fill: "transparent" }); bindTip(c, `${p.item}: score ${p.score.toFixed(2)} · coverage ${pct(p.coverage)}, risk ${pct(p.risk)}`); g.append(c); }
+    const op = D.operating_point;
+    if (op) { g.append(s("circle", { cx: x(op.coverage), cy: y(op.risk), r: 6, fill: C("--s2"), stroke: C("--surface"), "stroke-width": 2 })); g.append(s("text", { x: x(op.coverage) - 8, y: y(op.risk) - 10, class: "val", "text-anchor": "end" }, `the gate: ${pct(op.coverage)} answered, ${pct(op.risk)} of those failed`)); }
+    chartCard("Answering less, failing less", "With the gate disabled, questions are answered in score order. The curve is the share of wrong answers as coverage grows; the orange dot is where the gate actually operates. The score alone is a weak ranking signal, which is why the gate leans on structure.", g,
+      legendOf([[C("--accent"), "no gate, by score"], [C("--s2"), "with the gate"]]), tableOf(["item", "score", "coverage", "risk"], rc.map(p => [p.item, p.score.toFixed(2), pct(p.coverage), pct(p.risk)])));
+  })();
+
+  // 4. strip plot: what the score can and cannot see
+  (() => {
+    const rows = [
+      ["on-topic (calibration)", D.calibration.filter(x => x.label === "positive")],
+      ["off-topic (calibration)", D.calibration.filter(x => x.label === "negative")],
+      ["dev: best unit carrying gold", D.distractors.filter(x => x.label === "gold present")],
+      ["dev: gold documents deleted", D.distractors.filter(x => x.label === "gold deleted")],
+    ];
+    const all = rows.flatMap(([, v]) => v.map(p => p.score));
+    if (!all.length) return;
+    const lo = Math.floor(Math.min(...all, -8)), hi = Math.ceil(Math.max(...all, 10));
+    const W = 560, rowH = 46, l = 180, r = 16, t = 8, H = t + rows.length * rowH + 28;
+    const g = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Cross-encoder scores by question type" });
+    const x = v => l + (v - lo) / (hi - lo) * (W - l - r);
+    for (let v = Math.ceil(lo / 4) * 4; v <= hi; v += 4) { g.append(s("line", { x1: x(v), x2: x(v), y1: t, y2: H - 22, stroke: C("--grid") })); g.append(s("text", { x: x(v), y: H - 6, "text-anchor": "middle" }, String(v))); }
+    const floors = [["prose floor", T.answer_prose, C("--accent")], ["table floor", T.answer_table, C("--s2")]];
+    for (const [name, v, c] of floors) { if (v === undefined) continue; g.append(s("line", { x1: x(v), x2: x(v), y1: t, y2: H - 22, stroke: c, "stroke-dasharray": "4 3", "stroke-width": 1.5 })); }
+    rows.forEach(([name, pts], i) => {
+      const cy = t + i * rowH + rowH / 2;
+      g.append(s("text", { x: 0, y: cy + 4, class: "lab" }, `${name} (${pts.length})`));
+      pts.forEach((p, j) => {
+        const jitter = ((j * 37) % 17 - 8) * 1.2;
+        const c = s("circle", { cx: x(p.score), cy: cy + jitter, r: 3.2, fill: p.kind === "table" ? C("--s2") : C("--accent"), "fill-opacity": 0.75, stroke: C("--surface"), "stroke-width": 1 });
+        bindTip(c, `${name}: ${p.kind} unit, logit ${p.score.toFixed(2)}${p.item ? " · " + p.item : ""}`);
+        g.append(c);
+      });
+    });
+    const deleted = rows[3][1];
+    const high = deleted.filter(p => p.score >= (p.kind === "table" ? T.answer_table : T.answer_prose)).length;
+    chartCard("What the score can and cannot see", `The floors (dashed) separate on-topic from off-topic questions cleanly. But with every gold document deleted, the best remaining unit still clears its floor for ${high} of ${deleted.length} dev questions: an on-topic distractor looks just as relevant. That is why near-misses are decided by structure, not by a threshold.`, g,
+      legendOf([[C("--accent"), "prose unit (floor " + (T.answer_prose ?? "") + ")"], [C("--s2"), "table row (floor " + (T.answer_table ?? "") + ")"]]),
+      tableOf(["group", "n", "median logit", "share above its floor"], rows.map(([nm, pts]) => {
+        const sc = pts.map(p => p.score).sort((a, b) => a - b); const med = sc.length ? sc[Math.floor(sc.length / 2)] : 0;
+        const above = pts.filter(p => p.score >= (p.kind === "table" ? T.answer_table : T.answer_prose)).length;
+        return [nm, pts.length, med.toFixed(2), pts.length ? pct(above / pts.length) : "–"];
+      })));
+  })();
+
+  // 5. retrieval recall@k by mode
+  (() => {
+    const ranks = D.retrieval; const ids = Object.keys(ranks || {}); if (!ids.length) return;
+    const modes = [["bm25", "BM25"], ["dense", "dense"], ["hybrid_rrf", "RRF fusion, no reranker"], ["full", "union + cross-encoder (used)"], ["rerank_all", "cross-encoder on every unit"]];
+    const ks = [1, 3, 10];
+    const W = 560, rowH = 30, l = 200, r = 40, H = modes.length * rowH + 40;
+    const g = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Recall at k by retrieval mode" });
+    const x = v => l + v * (W - l - r);
+    for (const t of [0, 0.5, 1]) { g.append(s("line", { x1: x(t), x2: x(t), y1: 4, y2: H - 24, stroke: C("--grid") })); g.append(s("text", { x: x(t), y: H - 8, "text-anchor": "middle" }, pct(t))); }
+    const shades = [1, 0.62, 0.32];  // one hue, stepped: top 1 is the strongest claim
+    const rows = [];
+    modes.forEach(([m, name], i) => {
+      const y = 6 + i * rowH;
+      g.append(s("text", { x: 0, y: y + 16, class: "lab" }, name));
+      const vals = ks.map(k => ids.filter(id => ranks[id][m] !== null && ranks[id][m] !== undefined && ranks[id][m] <= k).length / ids.length);
+      vals.forEach((v, j) => {
+        const bar = s("rect", { x: l, y: y + 2 + j * 8, width: Math.max(1, x(v) - l), height: 6, rx: 3, fill: C("--accent"), "fill-opacity": shades[j] });
+        bindTip(bar, `${name}: gold unit in the top ${ks[j]} for ${pct(v)} of ${ids.length} questions`); g.append(bar);
+      });
+      g.append(s("text", { x: x(vals[0]) + 6, y: y + 9, class: "val" }, pct(vals[0])));
+      rows.push([name, ...vals.map(pct)]);
+    });
+    chartCard("Where the gold passage ranks", "Share of questions whose first gold-carrying unit is in the top 1, 3 or 10, per retrieval mode. The cross-encoder over the union recovers almost all of what scoring every unit would, at a fraction of the cost.", g,
+      legendOf(ks.map((k, j) => [`color-mix(in srgb, ${C("--accent")} ${Math.round(100 * shades[j])}%, transparent)`, "top " + k])), tableOf(["mode", "top 1", "top 3", "top 10"], rows));
+  })();
+
+  // ---------------------------------------------------------------- every question
+  const tbody = document.querySelector("#qtable tbody");
+  const filters = [["all", "All"], ["dev", "Dev"], ["heldout_v1", "Held-out v1"], ["heldout_v2", "Held-out v2"], ["fail", "Failed"]];
+  let current = "all";
+  function renderTable() {
+    tbody.replaceChildren();
+    for (const it of D.items) {
+      if (["dev", "heldout_v1", "heldout_v2"].includes(current) && it.split !== current) continue;
+      if (current === "fail" && it.passed) continue;
+      const tr = el("tr", { tabindex: "0" }, el("td", { class: "mono", text: it.id }), el("td", { text: it.query }), el("td", {}, el("span", { class: "pill " + it.decision, text: it.decision })),
+        el("td", { class: "mono", text: it.rule }), el("td", {}, el("span", { class: it.passed ? "res-ok" : "res-no", text: it.passed ? "pass" : "fail" }), it.passed ? "" : el("div", { class: "sub", text: it.stage })));
+      const detail = el("tr", { hidden: "" }, el("td", { colspan: "5" }, ...answerBlock(it)));
+      const toggle = () => { detail.hidden = !detail.hidden; };
+      tr.addEventListener("click", toggle); tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      tbody.append(tr, detail);
+    }
+  }
+  const fbox = document.getElementById("qfilter");
+  for (const [k, l] of filters) {
+    const b = el("button", { class: "chip", type: "button", "aria-pressed": String(k === current), text: l });
+    b.addEventListener("click", () => { current = k; for (const c of fbox.children) c.setAttribute("aria-pressed", String(c === b)); renderTable(); });
+    fbox.append(b);
+  }
+  renderTable();
+
+  // ---------------------------------------------------------------- failures
+  const DX = D.diagnosis || {};
+  const fl = document.getElementById("faillist");
+  const failing = D.items.filter(i => !i.passed);
+  if (!failing.length) fl.append(el("p", { text: "No failing questions." }));
+  for (const it of failing) {
+    fl.append(el("div", { class: "fail" },
+      el("div", { class: "fh" }, el("span", { class: "id", text: it.id }), el("span", { class: "badge", text: ({ dev: "dev", heldout_v1: "held-out v1, after the fixes", heldout_v2: "held-out v2, blind" })[it.split] || it.split }), el("span", { class: "badge bad", text: it.stage }), it.predicted ? el("span", { class: "badge acc", text: "predicted before the first run" }) : null),
+      el("p", { class: "q", text: it.query }),
+      el("p", { class: "dx", text: DX[it.id] || it.predicted || "" })));
+  }
+  const v1 = (D.v1_blind || []).filter(i => !i.passed);
+  if (v1.length) {
+    const v1s = D.v1_blind_summary || {};
+    fl.append(el("div", { class: "fail" },
+      el("div", { class: "fh" }, el("span", { class: "id", text: "held-out v1" }), el("span", { class: "badge warn", text: "blind run, before the fixes" }), el("span", { class: "badge", text: `passed ${v1s.passed || ""}` })),
+      el("p", { class: "dx", text: "The first blind run, kept exactly as it came out. Its failures had five general causes: a floor fitted on questions worded like the documents, an outdated source allowed to supply a value, a context sentence split into a question of its own, account rules written only for the customer's voice, and answers missing a second passage. Each row says what happened and what changed." }),
+      el("div", { class: "scroll" }, tableOf(["id", "question", "decision", "what happened, and what changed"], v1.map(i => [i.id, i.query, `${i.decision} (wanted ${i.acceptable.join("/")})`, i.diagnosis])))));
+  }
+  const inv = D.invariance || [];
+  if (inv.length) {
+    const ok = inv.filter(p => p.passed).length;
+    fl.append(el("div", { class: "fail" }, el("div", { class: "fh" }, el("span", { class: "id", text: "paraphrases" }), el("span", { class: "badge " + (ok === inv.length ? "good" : "warn"), text: `${ok}/${inv.length} invariant` })),
+      el("p", { class: "dx", text: D.invariance_note || "" }),
+      el("div", { class: "scroll" }, tableOf(["base", "paraphrase", "base decision", "paraphrase decision", "same sources"], inv.map(p => [p.base, p.query, p.base_decision, p.decision, p.same_sources ? "yes" : "no"])))));
+  }
+
+  // ---------------------------------------------------------------- Q&A
+  const qa = document.getElementById("qalist");
+  for (const [q, a] of D.qa || []) qa.append(el("details", {}, el("summary", { text: q }), el("p", { text: a })));
+
+  // intro and provenance
+  const intro = document.getElementById("results-intro");
+  intro.textContent = D.results_intro || "";
+  document.getElementById("frozen").textContent = `Answers as of ${D.snapshot}. Frozen eval files: ${Object.entries(D.frozen).map(([k, v]) => k + " " + v).join(", ")}. Cold start ${(D.cold_ms / 1000).toFixed(1)} s.`;
+})();
+</script>

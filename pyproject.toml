@@ -1,0 +1,33 @@
+[project]
+name = "mbfs-rag"
+version = "0.1.0"
+description = "Customer-knowledge retrieval and grounding service for MerchantBridge contact-center agents"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0",
+  "beautifulsoup4>=4.12",
+  "fastembed==0.9.0",       # pinned: its model registry maps model names to Hugging Face repos in code
+  "py-rust-stemmers>=0.1",  # Snowball stemmer (already a fastembed dependency; declared because we use it)
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.29"]
+llm = ["anthropic>=1.2"]
+dev = ["pytest>=8", "httpx>=0.27", "ruff>=0.6", "anthropic>=1.2", "fastapi>=0.110"]
+
+[tool.setuptools]
+packages = ["mbfs_rag", "mbfs_rag.ingest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]  # the package is not installed; a bare `pytest` must still import it from the checkout
+markers = ["models: needs the local embedding and reranker models (python -m mbfs_rag download-models)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = [".venv", ".cache", "eval/results"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]

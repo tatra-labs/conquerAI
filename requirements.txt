@@ -1,0 +1,17 @@
+# Exact versions this was built and evaluated with (Python 3.11, Windows 11 and CPU only).
+# Core
+numpy==2.4.6
+beautifulsoup4==4.15.0
+fastembed==0.9.0
+onnxruntime==1.31.0
+tokenizers==0.23.3
+huggingface-hub==1.33.0
+py-rust-stemmers==0.1.8
+# HTTP API (python -m mbfs_rag serve)
+fastapi==0.150.0
+uvicorn==0.54.0
+# Optional LLM generator (used only when ANTHROPIC_API_KEY is set)
+anthropic==1.15.0
+# Tests
+pytest==9.1.1
+httpx==0.28.1

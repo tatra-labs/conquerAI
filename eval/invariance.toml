@@ -1,0 +1,51 @@
+# Paraphrase invariance (CheckList-style): each paraphrase must get the same decision as its dev item and
+# cite at least one of the same documents. Written by a separate agent that saw only the dev questions,
+# never the system's answers; customer and agent shorthand on purpose.
+
+[[pair]]
+base = "D02"
+query = "cust on the Plus plan wants to send an intl wire out - what do we charge for that?"
+
+[[pair]]
+base = "D03"
+query = "Bridge Essentials - what do you guys charge per month for it?"
+
+[[pair]]
+base = "D04"
+query = "if I park $30k in Bridge Reserve Savings, what APY am I getting on that?"
+
+[[pair]]
+base = "D05"
+query = "what fee do you guys hit me with when I get a chargeback?"
+
+[[pair]]
+base = "D08"
+query = "if I leave $3k in my Bridge Essentials acct, does that get me out of the monthly fee?"
+
+[[pair]]
+base = "D12"
+query = "can you pull up the balance right now on the acct ending in 4417?"
+
+[[pair]]
+base = "D13"
+query = "need a cashier's check, what's the fee for one?"
+
+[[pair]]
+base = "D15"
+query = "biz credit card - what do you charge on international transactions?"
+
+[[pair]]
+base = "D16"
+query = "intl wires - what time's the deadline to get them in?"
+
+[[pair]]
+base = "D19"
+query = "do I make any interest keeping money in Bridge business checking?"
+
+[[pair]]
+base = "D20"
+query = "is a 1099-K still coming my way if card sales were just $3,000?"
+
+[[pair]]
+base = "D22"
+query = "got $400k sitting in Reserve Savings, is that covered by the FDIC?"

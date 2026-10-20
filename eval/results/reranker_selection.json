@@ -1,0 +1,74 @@
+{
+ "about": "Cross-encoders compared on the calibration set (eval/calibration.toml), scoring the system's own candidate pool; AUC of the top logit, on-topic vs not-covered. Timings are per question on a shared desktop CPU, ONNX Runtime 4 threads.",
+ "questions": {
+  "on_topic": 208,
+  "not_covered": 100
+ },
+ "models": {
+  "Xenova/ms-marco-MiniLM-L-6-v2": {
+   "revision": "a09144355adeed5f58c8ed011d209bf8ee5a1fec",
+   "auc": 0.869,
+   "auc_by_style": {
+    "shorthand": 0.853,
+    "customer": 0.85,
+    "narrative": 0.894,
+    "typo": 0.879
+   },
+   "threshold_10to1": 2.18,
+   "on_topic_answered": 0.269,
+   "not_covered_answered": 1,
+   "top1_gold": 0.558,
+   "sec_per_question": 0.433
+  },
+  "Xenova/ms-marco-MiniLM-L-12-v2": {
+   "revision": "42a4a787e30451cf9dbd09080c2a5b8dde332c1e",
+   "auc": 0.865,
+   "auc_by_style": {
+    "shorthand": 0.844,
+    "customer": 0.846,
+    "narrative": 0.89,
+    "typo": 0.88
+   },
+   "threshold_10to1": 1.72,
+   "on_topic_answered": 0.356,
+   "not_covered_answered": 2,
+   "top1_gold": 0.548,
+   "sec_per_question": 0.84
+  },
+  "jinaai/jina-reranker-v1-turbo-en": {
+   "revision": "b8c14f4e723d9e0aab4732a7b7b93741eeeb77c2",
+   "auc": 0.783,
+   "auc_by_style": {
+    "shorthand": 0.741,
+    "customer": 0.78,
+    "narrative": 0.886,
+    "typo": 0.726
+   },
+   "threshold_10to1": 0.22,
+   "on_topic_answered": 0.212,
+   "not_covered_answered": 0,
+   "top1_gold": 0.457,
+   "sec_per_question": 0.537
+  },
+  "onnx-community/bge-reranker-v2-m3-ONNX": {
+   "revision": "6f5ff65298512715a1e669753bc754d2bc8f367b",
+   "auc": 0.95,
+   "auc_by_style": {
+    "shorthand": 0.931,
+    "customer": 0.915,
+    "narrative": 0.978,
+    "typo": 0.975
+   },
+   "threshold_10to1": -1.34,
+   "on_topic_answered": 0.673,
+   "not_covered_answered": 1,
+   "top1_gold": 0.62,
+   "sec_per_question": 3.991
+  }
+ },
+ "dense_cosine_alone": {
+  "auc": 0.875,
+  "on_topic_answered": 0.5,
+  "not_covered_answered": 5
+ }
+}

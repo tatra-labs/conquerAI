@@ -1,0 +1,49 @@
+﻿MerchantBridge Financial Services — Business Fee & Rate Schedule,,,,,,,,
+"Effective July 1, 2026. This schedule replaces the schedule effective January 1, 2025.",,,,,,,,
+,,,,,,,,
+Code,Category,Service,Statement descriptor,Bridge Essentials,Bridge Plus,Bridge Premier,Unit,Notes
+ACC-01,Account,Monthly maintenance fee,MONTHLY SERVICE FEE,$12.00 [1],$25.00 [1],$45.00 [1],per month,
+ACC-02,Account,Excess transactions (over plan allowance),EXCESS ITEM FEE,$0.50,$0.40,Included,per item,"Allowance per statement cycle: 150 (Essentials), 300 (Plus), unlimited (Premier)"
+ACC-03,Account,Paper statements,PAPER STMT FEE,$3.00,$3.00,Free,per month,e-Statements are free on all plans
+ACC-04,Account,Returned item (NSF),NSF RETURNED ITEM FEE,$30.00 [2],$30.00 [2],$30.00 [2],per item,
+ACC-05,Account,Stop payment (check or ACH debit),STOP PAYMENT FEE,$30.00,$30.00,$30.00,per request,
+ACC-06,Account,Deposited item returned,DEPOSITED ITEM RETURN FEE,$12.00,$12.00,$12.00,per item,Charged when a check you deposited is returned unpaid
+ACC-07,Account,Early account closure,EARLY CLOSURE FEE,$50.00,$50.00,$50.00,per account,Applies if the account is closed within 90 days of opening
+ACC-08,Account,Dormant account,DORMANT ACCT FEE,$5.00,$5.00,$5.00,per month,After 12 consecutive months with no customer-initiated activity
+ACC-09,Account,Check orders,CHECK ORDER,Varies by check style; priced by our check vendor,Varies by check style; priced by our check vendor,Varies by check style; priced by our check vendor,per order,
+WIR-01,Wire transfers,Domestic wire – outgoing,DOM WIRE OUT FEE,$30.00,$25.00,Included,per wire,
+WIR-02,Wire transfers,Domestic wire – incoming,DOM WIRE IN FEE,$15.00,$10.00,Included,per wire,
+WIR-03,Wire transfers,International wire – outgoing,INTL WIRE OUT FEE,$50.00,$45.00,$25.00,per wire,Intermediary or correspondent bank fees may also apply [3]
+WIR-04,Wire transfers,International wire – incoming,INTL WIRE IN FEE,$16.00,$16.00,Included,per wire,Intermediary or correspondent bank fees may also apply [3]
+WIR-05,Wire transfers,Wire recall / amendment / trace,WIRE RECALL FEE,$35.00,$35.00,$35.00,per request,Charged whether or not the recall is successful
+ACH-01,ACH,Standard ACH origination,ACH ORIGINATION FEE,$0.25,"Included (first 100 per cycle), then $0.15",Included,per payment,
+ACH-02,ACH,Same-day ACH,SAME DAY ACH FEE,$5.00,$5.00,$2.00,per batch,Same-day submission deadline is 2:45 PM ET
+ACH-03,ACH,ACH return,ACH RETURN FEE,$5.00,$5.00,$5.00,per return,Charged when an ACH payment you originated is returned
+CRD-01,Debit card,Foreign transaction fee,FOREIGN TXN FEE,1% of transaction,1% of transaction,None,per transaction,Applies to purchases and ATM withdrawals processed outside the U.S.
+CRD-02,Debit card,Out-of-network ATM withdrawal,NON-NETWORK ATM FEE,$2.50 [4],$2.50 [4],$2.50 [4][5],per withdrawal,
+CRD-03,Debit card,Standard card replacement (5–7 business days),,Free,Free,Free,per card,
+CRD-04,Debit card,Expedited card replacement (2 business days),EXPEDITED CARD FEE,$25.00,$25.00,Free,per card,
+MER-01,Card processing,"Card-present transaction (tap, dip, swipe)",PROCESSING FEES,2.60% + $0.10,2.60% + $0.10,2.50% + $0.10,per transaction,
+MER-02,Card processing,"Card-not-present transaction (online, invoice, keyed)",PROCESSING FEES,2.90% + $0.30,2.90% + $0.30,2.75% + $0.30,per transaction,
+MER-03,Card processing,Interchange-plus pricing,PROCESSING FEES,See note,See note,See note,per transaction,"Available to merchants processing more than $100,000 per month: interchange + 0.30% + $0.08 per transaction. Contact sales."
+MER-04,Card processing,Instant Payout,INSTANT PAYOUT FEE,1.5% of payout (min $0.50),1.5% of payout (min $0.50),1.0% of payout (min $0.50),per payout,
+MER-05,Card processing,Chargeback,CB FEE,$25.00,$25.00,$25.00,per chargeback,Non-refundable regardless of the dispute outcome
+MER-06,Card processing,PCI compliance program,PCI PROGRAM FEE,$99.00,$99.00,Included,per year,Billed on the account anniversary
+MER-07,Card processing,PCI non-validation,PCI NONVAL FEE,$19.95,$19.95,$19.95,per month,Charged if the annual SAQ is not completed within 60 days of its due date
+HW-01,Terminal hardware,BridgeTerminal Mini – purchase,TERMINAL PURCHASE,$199.00,$199.00,$199.00,one time,
+HW-02,Terminal hardware,BridgeTerminal Mini – rental,TERMINAL RENTAL,$15.00,$15.00,$15.00,per month,
+HW-03,Terminal hardware,BridgeTerminal Pro – purchase,TERMINAL PURCHASE,$599.00,$599.00,$599.00,one time,
+HW-04,Terminal hardware,BridgeTerminal Pro – rental,TERMINAL RENTAL,$39.00,$39.00,$39.00,per month,
+HW-05,Terminal hardware,Terminal non-return – BridgeTerminal Mini,TERMINAL NONRETURN FEE,$199.00,$199.00,$199.00,per terminal,Charged if a rented terminal is not returned within 30 days of cancellation or account closure
+HW-06,Terminal hardware,Terminal non-return – BridgeTerminal Pro,TERMINAL NONRETURN FEE,$599.00,$599.00,$599.00,per terminal,Charged if a rented terminal is not returned within 30 days of cancellation or account closure
+SAV-01,Bridge Reserve Savings,Savings monthly maintenance fee,SAVINGS MAINT FEE,$5.00 [6],$5.00 [6],$5.00 [6],per month,
+SAV-02,Bridge Reserve Savings,Excess savings withdrawals,EXCESS WITHDRAWAL FEE,$10.00,$10.00,$10.00,per withdrawal,Applies to each withdrawal beyond 6 per statement cycle
+SAV-03,Bridge Reserve Savings,Interest rates,,See rate sheet,See rate sheet,See rate sheet,,Variable tiered rates; see the Bridge Reserve Savings Rate Sheet
+,,,,,,,,
+Footnotes,,,,,,,,
+[1] Waivable — see Business Checking Plans for waiver requirements.,,,,,,,,
+[2] A maximum of 3 returned item (NSF) fees will be charged per business day.,,,,,,,,
+[3] MerchantBridge does not control fees deducted by intermediary or beneficiary banks.,,,,,,,,
+[4] ATM operators may charge an additional surcharge. Allpoint network ATMs are surcharge-free.,,,,,,,,
+[5] Premier: up to 4 out-of-network ATM fees are rebated per statement cycle.,,,,,,,,
+"[6] Waived with a minimum daily balance of $1,000.",,,,,,,,

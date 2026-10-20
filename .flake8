@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 120
+extend-ignore = E203, E701
+exclude = .venv, .cache, eval/results
+# report.py embeds the report page's CSS and HTML; build_walkthrough.py holds the page's narrative as strings.
+per-file-ignores = mbfs_rag/report.py:E501, scripts/build_walkthrough.py:E501
